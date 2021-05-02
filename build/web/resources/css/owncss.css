@@ -134,6 +134,22 @@
         !important;   
 }
 
+.savedCss{
+    background: url(../images/ownimages/button/saved.png)no-repeat center left
+        !important;  
+    
+}
+
+.annulerCss{
+    background: url(../images/ownimages/icons/adobecreativecloudicon.png)no-repeat center left
+        !important;
+    
+}
+
+.foldericon{
+    background: url(../images/ownimages/button/foldericon.png) no-repeat center left !important;
+}
+
 
 
 

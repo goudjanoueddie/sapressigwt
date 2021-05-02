@@ -125,7 +125,7 @@ public class HomePage extends ContentPanel
     public ContentPanel getBanner()
     {
         ContentPanel bannerPanel = new ContentPanel();
-        bannerPanel.setHeaderVisible(false);
+        bannerPanel.setHeaderVisible(true);
         bannerPanel.add(new Image("resources/images/banner.png"));
         
         return bannerPanel;

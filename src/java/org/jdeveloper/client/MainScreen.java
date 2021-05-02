@@ -14,6 +14,7 @@ import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.Viewport;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayout;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
+import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -21,6 +22,8 @@ import org.jdeveloper.client.components.LeftNavigationPanel;
 import org.jdeveloper.client.components.MainPanel;
 import org.jdeveloper.client.components.NavigationToolBar;
 import org.jdeveloper.client.components.RightNavigationPanel;
+import org.jdeveloper.client.portlet.CommercialNavigationPanel;
+import com.google.gwt.user.client.ui.Image;
 
 /**
  *
@@ -53,11 +56,14 @@ public class MainScreen {
           rightSidebarLayoutData.setCollapsible(true);
           rightSidebarLayoutData.setMargins(new Margins(0,5,0,5));
           BorderLayoutData footerLayoutData=new BorderLayoutData(Style.LayoutRegion.SOUTH,20);
-          footerLayoutData.setMargins(new Margins(5));      
+          //BorderLayoutData footerLayoutData=new BorderLayoutData(Style.LayoutRegion.SOUTH,130);
+          footerLayoutData.setMargins(new Margins(5));
+          footerLayoutData.setCollapsible(true);
           tabPanel.setMinTabWidth(115);
           tabPanel.setTabScroll(true);
           tabPanel.setCloseContextMenu(true);
-          viewport.add(getMenuAndToolBar(), menuBarToolBarLayoutData);
+          //viewport.add(getMenuAndToolBar(), menuBarToolBarLayoutData);
+          viewport.add(getBanner(), menuBarToolBarLayoutData);
           viewport.add(getLeftSideBar(), leftSidebarLayoutData);
           viewport.add(getMainContents(), mainContentsLayoutData);
           viewport.add(getRightSideBar(), rightSidebarLayoutData);
@@ -90,8 +96,13 @@ public class MainScreen {
     }
     
     public VerticalPanel getFooter(){
-       
-       
+   // public ContentPanel getFooter(){
+        
+        /*CommercialNavigationPanel commercialNavigationPanel=new CommercialNavigationPanel();
+        Label label = new Label("Design by JDEVELOPER.Copyright © JDEVELOPER.");
+        commercialNavigationPanel.add(label);
+        return commercialNavigationPanel;*/
+           
        VerticalPanel footerPanel = new VerticalPanel();
        footerPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
        Label label = new Label("Design by JDEVELOPER.Copyright © JDEVELOPER.");
@@ -122,9 +133,21 @@ public class MainScreen {
     
     
     private ContentPanel getMenuAndToolBar() {
-        NavigationToolBar navigationToolBar=new NavigationToolBar();
-        return navigationToolBar;
+        /*NavigationToolBar navigationToolBar=new NavigationToolBar();
+        return navigationToolBar;*/
+        
+        CommercialNavigationPanel commercialNavigationPanel = new CommercialNavigationPanel();
+        return commercialNavigationPanel;
     }
+    
+    public ContentPanel getBanner()
+        {
+            ContentPanel bannerPanel = new ContentPanel();
+            bannerPanel.setLayout(new FitLayout());
+            //bannerPanel.setHeaderVisible(false);
+            bannerPanel.add(new Image("resources/images/banner2.png"));
+            return bannerPanel;
+        }
 
     
 }

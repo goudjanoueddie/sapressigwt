@@ -29,6 +29,8 @@ public class RightNavigationPanel extends ContentPanel {
     private Button chercherButton=new Button("Chercher");
    // private Button updateButton=new Button("Update");
     private Button deleteButton=new Button("Delete");
+    
+    final  SapressiPopup sapressiPopup=new SapressiPopup();
 
     
     
@@ -36,8 +38,8 @@ public class RightNavigationPanel extends ContentPanel {
     public RightNavigationPanel(){
         
         setLayout(new FitLayout());
+        sapressiPopup.setConstrainViewport(true);
         add(getRightSideBarPanel());
-        
         
     }
     
@@ -79,10 +81,8 @@ public class RightNavigationPanel extends ContentPanel {
 
             @Override
             public void componentSelected(ComponentEvent ce) {
-                
                 EmployeeForm employeeForm=new EmployeeForm();
-                 MainScreen.addTab("Ajouter Employe", employeeForm);
-                 
+                MainScreen.addTab("Ajouter Employe", employeeForm);    
             }
         });
         
@@ -96,14 +96,13 @@ public class RightNavigationPanel extends ContentPanel {
 
             @Override
             public void componentSelected(ComponentEvent ce) {
+                           
+                //sapressiPopup.show();
                  
             }
         });
         
         ajoutProfilContentPanel.add(chercherButton,new RowData(1,-1,new Margins(5,5,10,5)));
-        
-        
-        
         rightSideBarPanel.add(setupContentPanel);
         rightSideBarPanel.add(ajoutProfilContentPanel);
         return rightSideBarPanel;

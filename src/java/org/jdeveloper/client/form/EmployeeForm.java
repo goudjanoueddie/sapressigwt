@@ -7,6 +7,11 @@ package org.jdeveloper.client.form;
 
 import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
+import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.ComponentEvent;
+import com.extjs.gxt.ui.client.event.Events;
+import com.extjs.gxt.ui.client.event.Listener;
+import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.button.Button;
@@ -22,7 +27,9 @@ import com.extjs.gxt.ui.client.widget.layout.ColumnData;
 import com.extjs.gxt.ui.client.widget.layout.ColumnLayout;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
+import com.extjs.gxt.ui.client.widget.tips.ToolTipConfig;
 import java.util.Date;
+import org.jdeveloper.client.components.SapressiPopup;
 
 /**
  *
@@ -36,7 +43,7 @@ public class EmployeeForm extends FormPanel{
     TextField<String> mobile=new TextField<String>();
     TextField<String> email=new TextField<String>();
     
-    DateField dateNaissance =new DateField();
+    DateField dateNaissance = new DateField();
     
     Radio maleRadio = new Radio();
     Radio femaleRadio = new Radio();
@@ -45,15 +52,14 @@ public class EmployeeForm extends FormPanel{
     
     TextArea addressField = new TextArea();
     
-    Button savedButton=new Button("Enregistrer");
-    Button cancelButton=new Button("Annuler");
+    Button savedButton=new Button("");
+    Button cancelButton=new Button("");
     
     
     private void createForm(){
         
         setFrame(true);
         setHeading("Employé");
-       // setSize(600,500);
         setLabelAlign(LabelAlign.LEFT);
         setButtonAlign(HorizontalAlignment.CENTER);
         LayoutContainer main=new LayoutContainer();
@@ -73,7 +79,7 @@ public class EmployeeForm extends FormPanel{
         left.add(nom,formData);
         
         mobile.setFieldLabel("Telephone");
-        left.add(mobile);
+        left.add(mobile,formData);
         
         dateNaissance.setFieldLabel("Date de Naissance");
         dateNaissance.setMinValue(new Date(60,1,1));
@@ -121,6 +127,47 @@ public class EmployeeForm extends FormPanel{
         addressField.setHeight(150);
         add(addressField,new FormData("100%"));
         
+        cancelButton.addSelectionListener(new SelectionListener(){
+
+        @Override
+        public void componentSelected(ComponentEvent ce) {
+           
+            
+            nom.setValue(null);
+            prenom.setValue(null);
+            mobile.setValue(null);
+            email.setValue(null);
+            dateNaissance.setValue(null);
+            maleRadio.setValue(true);
+            departmentCombo.setSimpleValue("");
+            addressField.setValue(null);
+          
+          }
+        
+        
+        });
+        
+        ToolTipConfig saveButtonToolTipConfig=new ToolTipConfig();
+        saveButtonToolTipConfig.setTitle("Enregistrer Valeur");
+        saveButtonToolTipConfig.setText("Ce bouton vous permet d'enregistrer les valeurs dans la base de données");
+        
+        savedButton.setToolTip(saveButtonToolTipConfig);
+        savedButton.setIconAlign(Style.IconAlign.TOP);
+        savedButton.setIconStyle("manager-entreprise-button");
+        savedButton.setScale(Style.ButtonScale.LARGE);
+        
+        ToolTipConfig cancelButtonToolTipConfig=new ToolTipConfig();
+        cancelButtonToolTipConfig.setTitle("Annuler");
+        cancelButtonToolTipConfig.setText("Ce bouton vous permet d'effacer les champs du formulaire");
+        
+        cancelButton.setToolTip(cancelButtonToolTipConfig);
+        cancelButton.setIconAlign(Style.IconAlign.TOP);
+        cancelButton.setIconStyle("annulerCss");
+        cancelButton.setScale(Style.ButtonScale.LARGE);
+        
+        
+        handlecancelButtonCLick();
+        
         addButton(savedButton);
         addButton(cancelButton);
     
@@ -128,6 +175,27 @@ public class EmployeeForm extends FormPanel{
 
     public EmployeeForm() {
         createForm();
+        //handlecancelButtonCLick();
+    } 
+    
+    private void handlecancelButtonCLick(){
+            
+     cancelButton.addSelectionListener(new SelectionListener(){
+
+     @Override
+     public void componentSelected(ComponentEvent ce) {
+            nom.setValue(null);
+            prenom.setValue(null);
+            mobile.setValue(null);
+            email.setValue(null);
+            dateNaissance.setValue(null);
+            maleRadio.setValue(true);
+            departmentCombo.setSimpleValue("");
+            addressField.setValue(null);
+          }
+        });
+    
+   
     }   
     
 }

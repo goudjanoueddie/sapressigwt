@@ -18,7 +18,10 @@ import com.extjs.gxt.ui.client.event.ComponentEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import org.jdeveloper.client.MainEntryPoint;
 import org.jdeveloper.client.MainScreen;
+import org.jdeveloper.client.form.ClientForm;
 import org.jdeveloper.client.form.PiloterQualiteForm;
+import org.jdeveloper.client.form.ProspectionForm;
+import  org.jdeveloper.client.portlet.CommercialNavigationPanel;
 
 /**
  *
@@ -39,6 +42,7 @@ public class LeftNavigationPanel extends ContentPanel{
     private Button commandesButton = new Button("Commandes");
     private Button commerciauxButton = new Button("Commerciaux");
     private Button factureButton = new Button("Facture");
+    private Button recapButton=new Button("ShortCut");
     
     
     public LeftNavigationPanel(){ 
@@ -129,9 +133,35 @@ public class LeftNavigationPanel extends ContentPanel{
           prospectionButton.setIconStyle("prospection-button");
           prospectionButton.setScale(Style.ButtonScale.LARGE);
           
+           prospectionButton.addSelectionListener(new SelectionListener(){
+
+            @Override
+            public void componentSelected(ComponentEvent ce) {
+                /*ProspectionWindow prospection=new ProspectionWindow();
+                prospection.show();*/
+                
+                ProspectionForm prospectionForm=new ProspectionForm();
+                MainScreen.addTab("Prospection", prospectionForm);
+            }
+        
+        
+        
+        });
+          
           
           clientsButton.setIconStyle("clients-button");
           clientsButton.setScale(Style.ButtonScale.LARGE);
+          clientsButton.addSelectionListener(new SelectionListener(){
+
+            @Override
+            public void componentSelected(ComponentEvent ce) {
+                ClientForm  clientForm=new ClientForm();
+                MainScreen.addTab("Client", clientForm);
+            }
+        
+        
+        
+        });
           
           
           commandesButton.setIconStyle("commandes-button");
@@ -140,12 +170,24 @@ public class LeftNavigationPanel extends ContentPanel{
           
           factureButton.setIconStyle("factures-button");
           factureButton.setScale(Style.ButtonScale.LARGE);
+          
+          /*recapButton.setScale(Style.ButtonScale.LARGE);
+          recapButton.addSelectionListener(new SelectionListener(){
+            @Override
+            public void componentSelected(ComponentEvent ce) {
+                
+                SapressiPopup  sapressiPopup =new SapressiPopup();
+                sapressiPopup.show();
+                
+            }
+        });*/
 
           
           commercialContentPanel.add(prospectionButton,new RowData(1,-1,new Margins(5,5,10,5)));
           commercialContentPanel.add(clientsButton,new RowData(1,-1,new Margins(5,5,10,5)));
           commercialContentPanel.add(commandesButton,new RowData(1,-1,new Margins(5,5,10,5)));
           commercialContentPanel.add(factureButton,new RowData(1,-1,new Margins(5,5,10,5)));
+          //commercialContentPanel.add(recapButton,new RowData(1,-1,new Margins(5,5,10,5)));
           
           
           
