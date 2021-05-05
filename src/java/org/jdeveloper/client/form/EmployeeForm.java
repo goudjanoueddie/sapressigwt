@@ -13,6 +13,7 @@ import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
+import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.DateField;
@@ -28,8 +29,13 @@ import com.extjs.gxt.ui.client.widget.layout.ColumnLayout;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.extjs.gxt.ui.client.widget.tips.ToolTipConfig;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import java.util.Date;
 import org.jdeveloper.client.components.SapressiPopup;
+import org.jdeveloper.client.dto.EmployeDTO;
+import org.jdeveloper.client.rpc.GWTService;
+import org.jdeveloper.client.rpc.GWTServiceAsync;
 
 /**
  *
@@ -42,6 +48,7 @@ public class EmployeeForm extends FormPanel{
     TextField<String> prenom=new TextField<String>();
     TextField<String> mobile=new TextField<String>();
     TextField<String> email=new TextField<String>();
+    TextField<String> IdEmploye=new TextField<String>();
     
     DateField dateNaissance = new DateField();
     
@@ -54,6 +61,30 @@ public class EmployeeForm extends FormPanel{
     
     Button savedButton=new Button("");
     Button cancelButton=new Button("");
+    
+    final AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+        
+        MessageBox messageBox = new MessageBox();
+        
+        @Override
+        public void onFailure(Throwable caught) {
+            messageBox.setMessage("Impossible d'effectuer cet enregistrement");
+            messageBox.show();
+        }
+
+        @Override
+        public void onSuccess(Boolean result) {
+            
+            if(result){
+                messageBox.setMessage("Enregistrement effectué avec succès");
+            
+            }else{
+                messageBox.setMessage("Impossible d'effectuer cet enregistrement");
+            }
+            
+            messageBox.show();
+        }
+    };
     
     
     private void createForm(){
@@ -74,7 +105,7 @@ public class EmployeeForm extends FormPanel{
         FormData formData =new FormData("100%");
         
         nom.setFieldLabel("Nom");
-        nom.setAllowBlank(false);
+        //nom.setAllowBlank(false);
         nom.setSelectOnFocus(true);
         left.add(nom,formData);
         
@@ -115,9 +146,9 @@ public class EmployeeForm extends FormPanel{
         email.setFieldLabel("Email");
         right.add(email, formData);
         
-        /*addressField.setFieldLabel("Adresse");
-        right.add(addressField,formData);*/
-        
+        IdEmploye.setFieldLabel("ID Employe");
+        right.add(IdEmploye,formData);
+              
         main.add(left,new ColumnData(.5));
         main.add(right,new ColumnData(.5));
         
@@ -126,26 +157,6 @@ public class EmployeeForm extends FormPanel{
         addressField.setFieldLabel("Adresse");
         addressField.setHeight(150);
         add(addressField,new FormData("100%"));
-        
-        cancelButton.addSelectionListener(new SelectionListener(){
-
-        @Override
-        public void componentSelected(ComponentEvent ce) {
-           
-            
-            nom.setValue(null);
-            prenom.setValue(null);
-            mobile.setValue(null);
-            email.setValue(null);
-            dateNaissance.setValue(null);
-            maleRadio.setValue(true);
-            departmentCombo.setSimpleValue("");
-            addressField.setValue(null);
-          
-          }
-        
-        
-        });
         
         ToolTipConfig saveButtonToolTipConfig=new ToolTipConfig();
         saveButtonToolTipConfig.setTitle("Enregistrer Valeur");
@@ -167,6 +178,7 @@ public class EmployeeForm extends FormPanel{
         
         
         handlecancelButtonCLick();
+        handlesavedButtonClick();
         
         addButton(savedButton);
         addButton(cancelButton);
@@ -175,7 +187,6 @@ public class EmployeeForm extends FormPanel{
 
     public EmployeeForm() {
         createForm();
-        //handlecancelButtonCLick();
     } 
     
     private void handlecancelButtonCLick(){
@@ -184,18 +195,51 @@ public class EmployeeForm extends FormPanel{
 
      @Override
      public void componentSelected(ComponentEvent ce) {
+            cleanField();
+          }
+        });
+    
+   
+    }
+    
+    private void handlesavedButtonClick(){
+        
+        savedButton.addSelectionListener(new SelectionListener(){
+            
+            @Override
+            public void componentSelected(ComponentEvent ce) {
+                EmployeDTO employeDTO=new EmployeDTO();
+                employeDTO.setIdEmploye(IdEmploye.getValue());
+                employeDTO.setNomEmploye(nom.getValue());
+                employeDTO.setPrenomEmploye(prenom.getValue());
+                employeDTO.setTelephone(mobile.getValue());
+                employeDTO.setCourriel(email.getValue());
+                employeDTO.setDateNaissance(dateNaissance.getValue());
+                String value = (maleRadio.getValue()) ? maleRadio.getBoxLabel() : femaleRadio.getBoxLabel(); 
+                employeDTO.setGenre(value);
+                employeDTO.setDepartement(departmentCombo.getSimpleValue().toString());
+                employeDTO.setAdresse(addressField.getValue());
+                
+                ((GWTServiceAsync) GWT.create(GWTService.class)) .addEmploye(employeDTO, callback);
+                cleanField();
+            }
+        
+        
+        });
+    
+    }
+    
+    private void cleanField(){
             nom.setValue(null);
             prenom.setValue(null);
             mobile.setValue(null);
             email.setValue(null);
             dateNaissance.setValue(null);
-            maleRadio.setValue(true);
-            departmentCombo.setSimpleValue("");
+            maleRadio.clear();
+            femaleRadio.clear();
+            departmentCombo.clear();
             addressField.setValue(null);
-          }
-        });
-    
-   
-    }   
+            IdEmploye.setValue(null);
+    }
     
 }

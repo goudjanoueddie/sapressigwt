@@ -10,8 +10,6 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -44,69 +42,48 @@ public class Employes implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_employe")
-    private Integer idEmploye;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
+    @Column(name = "id_employe")
+    private String idEmploye;
+    @Size(max = 100)
     @Column(name = "nom_employe")
     private String nomEmploye;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     @Column(name = "prenom_employe")
     private String prenomEmploye;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     @Column(name = "telephone")
     private String telephone;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     @Column(name = "courriel")
     private String courriel;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "date_naissance")
     @Temporal(TemporalType.DATE)
     private Date dateNaissance;
-    @Size(max = 6)
+    @Size(max = 100)
     @Column(name = "genre")
     private String genre;
-    @Size(max = 12)
+    @Size(max = 100)
     @Column(name = "departement")
     private String departement;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     @Column(name = "adresse")
     private String adresse;
 
     public Employes() {
     }
 
-    public Employes(Integer idEmploye) {
+    public Employes(String idEmploye) {
         this.idEmploye = idEmploye;
     }
 
-    public Employes(Integer idEmploye, String nomEmploye, String prenomEmploye, String telephone, String courriel, Date dateNaissance, String adresse) {
-        this.idEmploye = idEmploye;
-        this.nomEmploye = nomEmploye;
-        this.prenomEmploye = prenomEmploye;
-        this.telephone = telephone;
-        this.courriel = courriel;
-        this.dateNaissance = dateNaissance;
-        this.adresse = adresse;
-    }
-
-    public Integer getIdEmploye() {
+    public String getIdEmploye() {
         return idEmploye;
     }
 
-    public void setIdEmploye(Integer idEmploye) {
+    public void setIdEmploye(String idEmploye) {
         this.idEmploye = idEmploye;
     }
 
