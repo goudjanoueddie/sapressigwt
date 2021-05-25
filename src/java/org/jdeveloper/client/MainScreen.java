@@ -15,7 +15,14 @@ import com.extjs.gxt.ui.client.widget.Viewport;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayout;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
+import com.extjs.gxt.ui.client.widget.layout.VBoxLayout;
+import com.extjs.gxt.ui.client.widget.layout.VBoxLayout.VBoxLayoutAlign;
+import com.extjs.gxt.ui.client.widget.menu.Menu;
+import com.extjs.gxt.ui.client.widget.menu.MenuBar;
+import com.extjs.gxt.ui.client.widget.menu.MenuBarItem;
+import com.extjs.gxt.ui.client.widget.menu.MenuItem;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import org.jdeveloper.client.components.LeftNavigationPanel;
@@ -25,11 +32,12 @@ import org.jdeveloper.client.components.RightNavigationPanel;
 import org.jdeveloper.client.portlet.CommercialNavigationPanel;
 import com.google.gwt.user.client.ui.Image;
 
+
 /**
  *
  * @author goudjanou
  */
-public class MainScreen {
+public class MainScreen extends ContentPanel {
     
      private final static TabPanel tabPanel = new TabPanel();
      BorderLayoutData mainContentsLayoutData =new BorderLayoutData(Style.LayoutRegion.CENTER);
@@ -38,7 +46,8 @@ public class MainScreen {
     
     
     public MainScreen(){
-    
+          
+          //setTopComponent(getBanner());
           viewport.add(tabPanel,mainContentsLayoutData);
           BorderLayout layout = new BorderLayout() ; 
           viewport.setLayout(layout);
@@ -63,6 +72,8 @@ public class MainScreen {
           tabPanel.setTabScroll(true);
           tabPanel.setCloseContextMenu(true);
           //viewport.add(getMenuAndToolBar(), menuBarToolBarLayoutData);
+          
+         
           viewport.add(getBanner(), menuBarToolBarLayoutData);
           viewport.add(getLeftSideBar(), leftSidebarLayoutData);
           viewport.add(getMainContents(), mainContentsLayoutData);
@@ -138,16 +149,74 @@ public class MainScreen {
         
         CommercialNavigationPanel commercialNavigationPanel = new CommercialNavigationPanel();
         return commercialNavigationPanel;
+        
     }
     
-    public ContentPanel getBanner()
-        {
+         public ContentPanel getBanner()
+        
+         {
             ContentPanel bannerPanel = new ContentPanel();
-            bannerPanel.setLayout(new FitLayout());
-            //bannerPanel.setHeaderVisible(false);
-            bannerPanel.add(new Image("resources/images/banner2.png"));
+            //bannerPanel.setLayout(new FitLayout());
+            
+            //VBoxLayout vBoxLayout=new VBoxLayout();
+            //vBoxLayout.setVBoxLayoutAlign(VBoxLayoutAlign.LEFT);
+            //bannerPanel.setLayout(vBoxLayout);
+            
+            bannerPanel.add(getMenuBar());     
+            VerticalPanel imagePanel = new VerticalPanel();
+            imagePanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+            imagePanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+            Image imageSapressi=new Image("resources/images/banner5.png");
+            imagePanel.add(imageSapressi);            
+            bannerPanel.add(imagePanel);
             return bannerPanel;
         }
+    
+   
+    
+    private MenuBar getMenuBar(){
+        MenuBar menuBar= new MenuBar();
+        
+        Menu fileMenu=new Menu();
+        Menu reportsMenu=new Menu();
+        Menu helpMenu=new Menu();
+        
+        //Items for File menu
+        MenuItem productMenuItem=new MenuItem("Product");
+        fileMenu.add(productMenuItem);
+        MenuItem stockMenuItem=new MenuItem("Stock");
+        fileMenu.add(stockMenuItem);
+        MenuItem purchaseMenuItem=new MenuItem("Purchase");
+        fileMenu.add(purchaseMenuItem);
+        MenuItem salesMenuItem=new MenuItem("Sales");
+        fileMenu.add(salesMenuItem);
+        
+        //Items for Reports menu
+        MenuItem productListMenuItem=new MenuItem("Product List");
+        reportsMenu.add(productListMenuItem);
+        MenuItem stockStatusMenuItem=new MenuItem("Stock Status");
+        reportsMenu.add(stockStatusMenuItem);
+        MenuItem purchaseDetailMenuItem=new MenuItem(
+        "Purchase Detail");
+        reportsMenu.add(purchaseDetailMenuItem);
+        MenuItem salesDetailMenuItem=new MenuItem("Sales Detail");
+        reportsMenu.add(salesDetailMenuItem);
+        //Items for Help menu
+        MenuItem aboutMenuItem=new MenuItem("About");
+        helpMenu.add(aboutMenuItem);
+        
+        MenuBarItem menuBarItemFile=new MenuBarItem("File",fileMenu);
+        MenuBarItem menuBarItemReports=
+        new MenuBarItem("Reports",reportsMenu);
+        MenuBarItem menuBarItemHelp=
+        new MenuBarItem("Help",helpMenu);
+        
+        menuBar.add(menuBarItemFile);
+        menuBar.add(menuBarItemReports);
+        menuBar.add(menuBarItemHelp);
+        
+        return menuBar;
+    }
 
     
 }

@@ -57,15 +57,15 @@ public class Prospection implements Serializable {
     @Size(max = 400)
     @Column(name = "besoins_attente_client")
     private String besoinsAttenteClient;
-    @Size(max = 10)
+    @Size(max = 100)
     @Column(name = "type")
     private String type;
     @JoinColumn(name = "id_clients", referencedColumnName = "id_clients")
     @ManyToOne(optional = false)
     private Clients idClients;
-    @JoinColumn(name = "id_commerciaux", referencedColumnName = "id_commerciaux")
-    @ManyToOne(optional = false)
-    private Commerciaux idCommerciaux;
+    @JoinColumn(name = "id_employe", referencedColumnName = "id_employe")
+    @ManyToOne
+    private Employes idEmploye;
 
     public Prospection() {
     }
@@ -127,12 +127,12 @@ public class Prospection implements Serializable {
         this.idClients = idClients;
     }
 
-    public Commerciaux getIdCommerciaux() {
-        return idCommerciaux;
+    public Employes getIdEmploye() {
+        return idEmploye;
     }
 
-    public void setIdCommerciaux(Commerciaux idCommerciaux) {
-        this.idCommerciaux = idCommerciaux;
+    public void setIdEmploye(Employes idEmploye) {
+        this.idEmploye = idEmploye;
     }
 
     @Override

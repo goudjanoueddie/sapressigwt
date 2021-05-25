@@ -15,7 +15,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 import org.jdeveloper.beans.Clients;
-import org.jdeveloper.beans.Commerciaux;
 import org.jdeveloper.beans.Prospection;
 import org.jdeveloper.controller.exceptions.NonexistentEntityException;
 import org.jdeveloper.controller.exceptions.RollbackFailureException;
@@ -38,137 +37,15 @@ public class ProspectionJpaController implements Serializable {
     }
 
     public void create(Prospection prospection) throws RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Clients idClients = prospection.getIdClients();
-            if (idClients != null) {
-                idClients = em.getReference(idClients.getClass(), idClients.getIdClients());
-                prospection.setIdClients(idClients);
-            }
-            Commerciaux idCommerciaux = prospection.getIdCommerciaux();
-            if (idCommerciaux != null) {
-                idCommerciaux = em.getReference(idCommerciaux.getClass(), idCommerciaux.getIdCommerciaux());
-                prospection.setIdCommerciaux(idCommerciaux);
-            }
-            em.persist(prospection);
-            if (idClients != null) {
-                idClients.getProspectionList().add(prospection);
-                idClients = em.merge(idClients);
-            }
-            if (idCommerciaux != null) {
-                idCommerciaux.getProspectionList().add(prospection);
-                idCommerciaux = em.merge(idCommerciaux);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
+        
     }
 
     public void edit(Prospection prospection) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Prospection persistentProspection = em.find(Prospection.class, prospection.getIdProspection());
-            Clients idClientsOld = persistentProspection.getIdClients();
-            Clients idClientsNew = prospection.getIdClients();
-            Commerciaux idCommerciauxOld = persistentProspection.getIdCommerciaux();
-            Commerciaux idCommerciauxNew = prospection.getIdCommerciaux();
-            if (idClientsNew != null) {
-                idClientsNew = em.getReference(idClientsNew.getClass(), idClientsNew.getIdClients());
-                prospection.setIdClients(idClientsNew);
-            }
-            if (idCommerciauxNew != null) {
-                idCommerciauxNew = em.getReference(idCommerciauxNew.getClass(), idCommerciauxNew.getIdCommerciaux());
-                prospection.setIdCommerciaux(idCommerciauxNew);
-            }
-            prospection = em.merge(prospection);
-            if (idClientsOld != null && !idClientsOld.equals(idClientsNew)) {
-                idClientsOld.getProspectionList().remove(prospection);
-                idClientsOld = em.merge(idClientsOld);
-            }
-            if (idClientsNew != null && !idClientsNew.equals(idClientsOld)) {
-                idClientsNew.getProspectionList().add(prospection);
-                idClientsNew = em.merge(idClientsNew);
-            }
-            if (idCommerciauxOld != null && !idCommerciauxOld.equals(idCommerciauxNew)) {
-                idCommerciauxOld.getProspectionList().remove(prospection);
-                idCommerciauxOld = em.merge(idCommerciauxOld);
-            }
-            if (idCommerciauxNew != null && !idCommerciauxNew.equals(idCommerciauxOld)) {
-                idCommerciauxNew.getProspectionList().add(prospection);
-                idCommerciauxNew = em.merge(idCommerciauxNew);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Integer id = prospection.getIdProspection();
-                if (findProspection(id) == null) {
-                    throw new NonexistentEntityException("The prospection with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
+        
     }
 
     public void destroy(Integer id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Prospection prospection;
-            try {
-                prospection = em.getReference(Prospection.class, id);
-                prospection.getIdProspection();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The prospection with id " + id + " no longer exists.", enfe);
-            }
-            Clients idClients = prospection.getIdClients();
-            if (idClients != null) {
-                idClients.getProspectionList().remove(prospection);
-                idClients = em.merge(idClients);
-            }
-            Commerciaux idCommerciaux = prospection.getIdCommerciaux();
-            if (idCommerciaux != null) {
-                idCommerciaux.getProspectionList().remove(prospection);
-                idCommerciaux = em.merge(idCommerciaux);
-            }
-            em.remove(prospection);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
+        
     }
 
     public List<Prospection> findProspectionEntities() {

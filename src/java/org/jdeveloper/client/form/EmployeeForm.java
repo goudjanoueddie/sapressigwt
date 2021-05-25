@@ -32,7 +32,7 @@ import com.extjs.gxt.ui.client.widget.tips.ToolTipConfig;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import java.util.Date;
-import org.jdeveloper.client.components.SapressiPopup;
+import org.jdeveloper.client.components.AddGroupePopup;
 import org.jdeveloper.client.dto.EmployeDTO;
 import org.jdeveloper.client.rpc.GWTService;
 import org.jdeveloper.client.rpc.GWTServiceAsync;

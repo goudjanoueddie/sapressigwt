@@ -8,8 +8,10 @@ package org.jdeveloper.beans;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -24,22 +26,23 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author goudjanou
  */
 @Entity
-@Table(name = "user")
+@Table(name = "User")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
-    , @NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.userPK.id = :id")
+    , @NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.id = :id")
     , @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.name = :name")
     , @NamedQuery(name = "User.findByUserName", query = "SELECT u FROM User u WHERE u.userName = :userName")
     , @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password")
-    , @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email")
-    , @NamedQuery(name = "User.findByPicture", query = "SELECT u FROM User u WHERE u.picture = :picture")
-    , @NamedQuery(name = "User.findByGroupid", query = "SELECT u FROM User u WHERE u.userPK.groupid = :groupid")})
+    , @NamedQuery(name = "User.findByUserNameParameter", query = "SELECT u.id FROM User u WHERE u.userName = :userName")})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected UserPK userPK;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Integer id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -55,44 +58,30 @@ public class User implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "password")
     private String password;
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "email")
-    private String email;
-    @Size(max = 100)
-    @Column(name = "picture")
-    private String picture;
-    @JoinColumn(name = "Group_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "Group_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Groupuser groupuser;
+    private Groupuser groupid;
 
     public User() {
     }
 
-    public User(UserPK userPK) {
-        this.userPK = userPK;
+    public User(Integer id) {
+        this.id = id;
     }
 
-    public User(UserPK userPK, String name, String userName, String password, String email) {
-        this.userPK = userPK;
+    public User(Integer id, String name, String userName, String password) {
+        this.id = id;
         this.name = name;
         this.userName = userName;
         this.password = password;
-        this.email = email;
     }
 
-    public User(int id, int groupid) {
-        this.userPK = new UserPK(id, groupid);
+    public Integer getId() {
+        return id;
     }
 
-    public UserPK getUserPK() {
-        return userPK;
-    }
-
-    public void setUserPK(UserPK userPK) {
-        this.userPK = userPK;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -119,34 +108,18 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public Groupuser getGroupid() {
+        return groupid;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPicture() {
-        return picture;
-    }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
-
-    public Groupuser getGroupuser() {
-        return groupuser;
-    }
-
-    public void setGroupuser(Groupuser groupuser) {
-        this.groupuser = groupuser;
+    public void setGroupid(Groupuser groupid) {
+        this.groupid = groupid;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (userPK != null ? userPK.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -157,7 +130,7 @@ public class User implements Serializable {
             return false;
         }
         User other = (User) object;
-        if ((this.userPK == null && other.userPK != null) || (this.userPK != null && !this.userPK.equals(other.userPK))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -165,7 +138,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "org.jdeveloper.beans.User[ userPK=" + userPK + " ]";
+        return "org.jdeveloper.beans.User[ id=" + id + " ]";
     }
     
 }

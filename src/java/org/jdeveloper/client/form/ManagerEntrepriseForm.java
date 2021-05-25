@@ -21,7 +21,7 @@ import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.extjs.gxt.ui.client.widget.tips.ToolTipConfig;
 import org.jdeveloper.client.MainEntryPoint;
-import org.jdeveloper.client.components.SapressiPopup;
+import org.jdeveloper.client.components.AddGroupePopup;
 
 
 public class ManagerEntrepriseForm extends FormPanel{
@@ -55,7 +55,7 @@ public class ManagerEntrepriseForm extends FormPanel{
     TextArea tauxdereglementdescreancesfournisseurs=new TextArea();
     
     
-    final SapressiPopup sapressiPopup=new SapressiPopup() ;
+    final AddGroupePopup sapressiPopup=new AddGroupePopup() ;
     
     Button calculerButton=new Button("");
     Button saveButton=new Button("");

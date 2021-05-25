@@ -11,4 +11,6 @@
   <inherits name="com.extjs.gxt.ui.GXT"/>
   <entry-point class="org.jdeveloper.client.MainEntryPoint"/>
   <!-- Do not define servlets here, use web.xml -->
+  <source path="client"/>
+  <source path="controller"/> 
 </module>

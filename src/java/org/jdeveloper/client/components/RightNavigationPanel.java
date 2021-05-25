@@ -25,22 +25,25 @@ import org.jdeveloper.client.form.EmployeeForm;
 public class RightNavigationPanel extends ContentPanel {
     
     private Button modifierCibleManagerEntreprise=new Button("Seuil Manager Entreprise");
+    private Button ajouterGroupe=new Button("Ajouter Groupe");
+    private Button ajouterUser = new Button("Ajouter Utilisateur");
     private Button ajouterEmployeeButton=new Button("Ajouter Employe");
     private Button chercherButton=new Button("Chercher");
    // private Button updateButton=new Button("Update");
     private Button deleteButton=new Button("Delete");
     
-    final  SapressiPopup sapressiPopup=new SapressiPopup();
+    //final  AddGroupePopup sapressiPopup=new AddGroupePopup();
+    
+    
+    
 
     
     
     
     public RightNavigationPanel(){
-        
         setLayout(new FitLayout());
-        sapressiPopup.setConstrainViewport(true);
-        add(getRightSideBarPanel());
-        
+        //sapressiPopup.setConstrainViewport(true);
+        add(getRightSideBarPanel());     
     }
     
     
@@ -75,10 +78,39 @@ public class RightNavigationPanel extends ContentPanel {
         ajoutProfilContentPanel.setIconStyle("ajoutProfilCss");
         ajoutProfilContentPanel.setLayout(new RowLayout());
         
+        ajouterGroupe.setIconStyle("ajouterGroupeCss");
+        ajouterGroupe.setScale(Style.ButtonScale.LARGE);
+        ajouterGroupe.addSelectionListener(new SelectionListener(){
+
+            @Override
+            public void componentSelected(ComponentEvent ce) {                           
+                AddGroupWindow addGroupeWindow = new AddGroupWindow();
+                addGroupeWindow.show();
+            }
+        });
+        
+        ajoutProfilContentPanel.add(ajouterGroupe,new RowData(1,-1,new Margins(5,5,10,5)));
+        
+        ajouterUser.setIconStyle("ajouterUserCss");
+        ajouterUser.setScale(Style.ButtonScale.LARGE);
+        ajouterUser.addSelectionListener(new SelectionListener(){
+
+            @Override
+            public void componentSelected(ComponentEvent ce) {
+                
+                AddUserWindow addUserWindow =new AddUserWindow();           
+                addUserWindow.show();
+                
+                 
+            }
+        });
+        
+        ajoutProfilContentPanel.add(ajouterUser,new RowData(1,-1,new Margins(5,5,10,5)));
+        
+        
         ajouterEmployeeButton.setIconStyle("ajouterCommercialCss");
         ajouterEmployeeButton.setScale(Style.ButtonScale.LARGE);
         ajouterEmployeeButton.addSelectionListener(new SelectionListener(){
-
             @Override
             public void componentSelected(ComponentEvent ce) {
                 EmployeeForm employeeForm=new EmployeeForm();
@@ -103,6 +135,7 @@ public class RightNavigationPanel extends ContentPanel {
         });
         
         ajoutProfilContentPanel.add(chercherButton,new RowData(1,-1,new Margins(5,5,10,5)));
+      
         rightSideBarPanel.add(setupContentPanel);
         rightSideBarPanel.add(ajoutProfilContentPanel);
         return rightSideBarPanel;

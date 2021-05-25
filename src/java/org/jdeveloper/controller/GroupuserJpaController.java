@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.transaction.UserTransaction;
 import org.jdeveloper.beans.Groupuser;
 import org.jdeveloper.controller.exceptions.IllegalOrphanException;
@@ -27,45 +28,34 @@ import org.jdeveloper.controller.exceptions.RollbackFailureException;
  */
 public class GroupuserJpaController implements Serializable {
 
+    
+    private UserTransaction utx = null;
+    private EntityManagerFactory emf = null;
+    
+    public GroupuserJpaController(){
+    emf= Persistence.createEntityManagerFactory("TableaudeBordSapressiPU");
+    }
+    
     public GroupuserJpaController(UserTransaction utx, EntityManagerFactory emf) {
         this.utx = utx;
         this.emf = emf;
     }
-    private UserTransaction utx = null;
-    private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
     public void create(Groupuser groupuser) throws RollbackFailureException, Exception {
-        if (groupuser.getUserList() == null) {
-            groupuser.setUserList(new ArrayList<User>());
-        }
-        EntityManager em = null;
+        
+         EntityManager em = null;
         try {
-            utx.begin();
             em = getEntityManager();
-            List<User> attachedUserList = new ArrayList<User>();
-            for (User userListUserToAttach : groupuser.getUserList()) {
-                userListUserToAttach = em.getReference(userListUserToAttach.getClass(), userListUserToAttach.getUserPK());
-                attachedUserList.add(userListUserToAttach);
-            }
-            groupuser.setUserList(attachedUserList);
+            em.getTransaction().begin();
             em.persist(groupuser);
-            for (User userListUser : groupuser.getUserList()) {
-                Groupuser oldGroupuserOfUserListUser = userListUser.getGroupuser();
-                userListUser.setGroupuser(groupuser);
-                userListUser = em.merge(userListUser);
-                if (oldGroupuserOfUserListUser != null) {
-                    oldGroupuserOfUserListUser.getUserList().remove(userListUser);
-                    oldGroupuserOfUserListUser = em.merge(oldGroupuserOfUserListUser);
-                }
-            }
-            utx.commit();
+            em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                utx.rollback();
+                //utx.rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
@@ -75,67 +65,11 @@ public class GroupuserJpaController implements Serializable {
                 em.close();
             }
         }
+        
     }
 
     public void edit(Groupuser groupuser) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Groupuser persistentGroupuser = em.find(Groupuser.class, groupuser.getId());
-            List<User> userListOld = persistentGroupuser.getUserList();
-            List<User> userListNew = groupuser.getUserList();
-            List<String> illegalOrphanMessages = null;
-            for (User userListOldUser : userListOld) {
-                if (!userListNew.contains(userListOldUser)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain User " + userListOldUser + " since its groupuser field is not nullable.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            List<User> attachedUserListNew = new ArrayList<User>();
-            for (User userListNewUserToAttach : userListNew) {
-                userListNewUserToAttach = em.getReference(userListNewUserToAttach.getClass(), userListNewUserToAttach.getUserPK());
-                attachedUserListNew.add(userListNewUserToAttach);
-            }
-            userListNew = attachedUserListNew;
-            groupuser.setUserList(userListNew);
-            groupuser = em.merge(groupuser);
-            for (User userListNewUser : userListNew) {
-                if (!userListOld.contains(userListNewUser)) {
-                    Groupuser oldGroupuserOfUserListNewUser = userListNewUser.getGroupuser();
-                    userListNewUser.setGroupuser(groupuser);
-                    userListNewUser = em.merge(userListNewUser);
-                    if (oldGroupuserOfUserListNewUser != null && !oldGroupuserOfUserListNewUser.equals(groupuser)) {
-                        oldGroupuserOfUserListNewUser.getUserList().remove(userListNewUser);
-                        oldGroupuserOfUserListNewUser = em.merge(oldGroupuserOfUserListNewUser);
-                    }
-                }
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Integer id = groupuser.getId();
-                if (findGroupuser(id) == null) {
-                    throw new NonexistentEntityException("The groupuser with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
+       
     }
 
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
@@ -221,6 +155,55 @@ public class GroupuserJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+    
+    public List<String> getAllGroupes(){
+        
+        EntityManager em = getEntityManager();
+        List groupListe;
+        
+        try{
+            
+            StringBuffer queryString = new StringBuffer();
+            queryString.append("select groupofuser.name from Groupuser groupofuser");
+            Query query= em.createQuery(queryString.toString());
+            groupListe = query.getResultList();
+        
+        }finally{
+            em.close();
+        }
+    
+        return groupListe;
+    }
+    
+    public Integer getIdGroup(String groupName){
+        
+        EntityManager em = getEntityManager();
+        Integer idGroup ;
+        try{
+             idGroup =(Integer) em.createNamedQuery("Groupuser.findByNameParameter")
+                    .setParameter("name",groupName)
+                    .getSingleResult();
+             return idGroup;
+        }finally{
+            em.close();
+        }
+        
+    }
+    
+    public int getIdGroupInt(String groupName){
+    
+        EntityManager em = getEntityManager();
+        int idGroup;
+        try{
+            //idGroup = (int)em.createNamedQuery("Groupuser.findByNameParameter").setParameter("name",groupName).getSingleResult();
+            Query q = em.createNamedQuery("Groupuser.findByNameParameter").setParameter("name",groupName);
+            return ((Long) q.getSingleResult()).intValue();
+        }finally{
+            em.close();
+        }
+        
+        //return idGroup;
     }
     
 }

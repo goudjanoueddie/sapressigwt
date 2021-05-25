@@ -150,6 +150,23 @@
     background: url(../images/ownimages/button/foldericon.png) no-repeat center left !important;
 }
 
+.ajouterGroupeCss{
+    background: url(../images/ownimages/icons/dossier-bleu-icon.png) no-repeat center left !important;
+}
+
+.ajouterUserCss {
+    background: url(../images/ownimages/icons/dossier-jaune-icon.png) no-repeat center left !important;
+}
+
+.enregistrerGroupeCss {   
+    /*background: url(../images/ownimages/icons/redo-icone.png) no-repeat center left !important;*/
+    background: url(../images/ownimages/icons/ajouter-icone.png) no-repeat center left !important;
+}
+
+.removeGroupeCss {
+    background: url(../images/ownimages/icons/retirer-icone-red.png) no-repeat center left !important;
+}
+
 
 
 

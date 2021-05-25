@@ -18,25 +18,8 @@ import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
  */
 public class MainPanel extends ContentPanel{
     
-
-    
-    
     public MainPanel(){
-    
-        //setHeading("Main");
-        
-        
+         
     }
-    
-    /*private void addTab(String text,ContentPanel contentPanel){
-    
-        TabItem item=new TabItem();
-        item.setText(text);
-        item.setClosable(true);
-        item.add(contentPanel);
-        tabPanel.add(item);
-        tabPanel.setSelection(item);
-    
-    }*/
     
 }

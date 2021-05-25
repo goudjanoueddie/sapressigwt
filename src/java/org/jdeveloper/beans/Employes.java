@@ -7,18 +7,21 @@ package org.jdeveloper.beans;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -39,6 +42,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Employes.findByDepartement", query = "SELECT e FROM Employes e WHERE e.departement = :departement")
     , @NamedQuery(name = "Employes.findByAdresse", query = "SELECT e FROM Employes e WHERE e.adresse = :adresse")})
 public class Employes implements Serializable {
+
+    @OneToMany(mappedBy = "idEmploye")
+    private List<Prospection> prospectionList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -174,6 +180,15 @@ public class Employes implements Serializable {
     @Override
     public String toString() {
         return "org.jdeveloper.beans.Employes[ idEmploye=" + idEmploye + " ]";
+    }
+
+    @XmlTransient
+    public List<Prospection> getProspectionList() {
+        return prospectionList;
+    }
+
+    public void setProspectionList(List<Prospection> prospectionList) {
+        this.prospectionList = prospectionList;
     }
     
 }

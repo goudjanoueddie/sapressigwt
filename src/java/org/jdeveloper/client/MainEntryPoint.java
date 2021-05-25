@@ -7,6 +7,7 @@ package org.jdeveloper.client;
 
 //import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 
+import com.extjs.gxt.ui.client.Registry;
 import org.jdeveloper.client.components.NavigationToolBar;
 import org.jdeveloper.client.components.MainPanel;
 import org.jdeveloper.client.components.RightNavigationPanel;
@@ -26,6 +27,7 @@ import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.core.shared.GWT;
 
 
 import com.extjs.gxt.ui.client.widget.TabItem;
@@ -34,6 +36,8 @@ import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.layout.AccordionLayout;
 import com.extjs.gxt.ui.client.widget.layout.RowData;
 import com.extjs.gxt.ui.client.widget.layout.RowLayout;
+import org.jdeveloper.client.SapressiConstant;
+import org.jdeveloper.client.rpc.GWTService;
 
 
 /**
@@ -48,6 +52,7 @@ public class MainEntryPoint implements EntryPoint {
     }
        
     public void onModuleLoad() {
+        Registry.register(SapressiConstant.SAPRESSI_SERVICE, GWT.create(GWTService.class));
         LoginDialog loginDialog =new LoginDialog();
         loginDialog.show();
         

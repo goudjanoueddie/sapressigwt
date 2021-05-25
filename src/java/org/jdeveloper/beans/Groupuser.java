@@ -28,12 +28,14 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author goudjanou
  */
 @Entity
-@Table(name = "groupuser")
+@Table(name = "Groupuser")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Groupuser.findAll", query = "SELECT g FROM Groupuser g")
     , @NamedQuery(name = "Groupuser.findById", query = "SELECT g FROM Groupuser g WHERE g.id = :id")
-    , @NamedQuery(name = "Groupuser.findByName", query = "SELECT g FROM Groupuser g WHERE g.name = :name")})
+    , @NamedQuery(name = "Groupuser.findByName", query = "SELECT g FROM Groupuser g WHERE g.name = :name")
+    , @NamedQuery(name = "Groupuser.findByNameParameter", query = "SELECT g.id FROM Groupuser g WHERE g.name = :name")    
+    })
 public class Groupuser implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,12 +44,15 @@ public class Groupuser implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "name")
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupuser")
+    
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "groupuser")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupid")
     private List<User> userList;
 
     public Groupuser() {
