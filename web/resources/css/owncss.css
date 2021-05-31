@@ -167,6 +167,21 @@
     background: url(../images/ownimages/icons/retirer-icone-red.png) no-repeat center left !important;
 }
 
+.modifierClientCss{
+    background: url(../images/ownimages/icons/crochet-icone.png) no-repeat center left !important;
+}
+
+.modifierFinalCss{
+    background: url(../images/ownimages/icons/modifierfinal.png) no-repeat center left !important;
+    
+}
+
+.quitterFinalCss{
+    background: url(../images/ownimages/icons/fermer-croix-supprimer-erreurs-sortie-icone.png) no-repeat center left !important;
+}
+
+
+
 
 
 

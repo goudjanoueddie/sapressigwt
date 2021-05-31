@@ -5,12 +5,14 @@
  */
 package org.jdeveloper.client.form;
 
+import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.event.ComponentEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
+import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.TextField;
@@ -19,6 +21,11 @@ import com.extjs.gxt.ui.client.widget.layout.ColumnLayout;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.extjs.gxt.ui.client.widget.tips.ToolTipConfig;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import org.jdeveloper.client.SapressiConstant;
+import org.jdeveloper.client.components.ModifyClientWindow;
+import org.jdeveloper.client.dto.ClientDTO;
+import org.jdeveloper.client.rpc.GWTServiceAsync;
 
 /**
  *
@@ -27,6 +34,7 @@ import com.extjs.gxt.ui.client.widget.tips.ToolTipConfig;
 public class ClientForm extends FormPanel{
     
     TextField<String> nom=new TextField<String>();
+    TextField<String> adresse = new TextField<String>();
     TextField<String> telephone=new TextField<String>();
     TextField<String> courriel=new TextField<String>();
     TextField<String> localisation =new TextField<String>();
@@ -39,6 +47,36 @@ public class ClientForm extends FormPanel{
     
     Button savedButton=new Button("");
     Button cancelButton=new Button("");
+    Button modifierButton = new Button("");
+    Button supprimerButton = new Button("");
+    
+    ClientDTO clientsDTO = new ClientDTO();
+    final GWTServiceAsync SapressiService=Registry.get(SapressiConstant.SAPRESSI_SERVICE);
+    
+    
+    final AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+        
+        MessageBox messageBox = new MessageBox();
+        
+        @Override
+        public void onFailure(Throwable caught) {
+            messageBox.setMessage(caught.getMessage());
+            messageBox.show();
+        }
+
+        @Override
+        public void onSuccess(Boolean result) {
+            
+            if(result){
+                messageBox.setMessage("Enregistrement effectué avec succès");
+            
+            }else{
+                messageBox.setMessage("Impossible d'effectuer cet enregistrement");
+            }
+            
+            messageBox.show();
+        }
+    };
     
     
     
@@ -60,9 +98,12 @@ public class ClientForm extends FormPanel{
         FormData formData =new FormData("100%");
         
         nom.setFieldLabel("Nom");
-        nom.setAllowBlank(false);
+        //nom.setAllowBlank(false);
         nom.setSelectOnFocus(true);
         left.add(nom,formData);
+        
+        adresse.setFieldLabel("Adresse");
+        left.add(adresse, formData);
         
         telephone.setFieldLabel("Telephone");
         left.add(telephone,formData);
@@ -118,10 +159,24 @@ public class ClientForm extends FormPanel{
         cancelButton.setIconStyle("annulerCss");
         cancelButton.setScale(Style.ButtonScale.LARGE);
         
+        ToolTipConfig modifierButtonToolTipConfig = new ToolTipConfig();
+        modifierButtonToolTipConfig.setTitle("Modifier");
+        modifierButtonToolTipConfig.setText("Modifier les informations du Client");
+        
+        modifierButton.setToolTip(modifierButtonToolTipConfig);
+        modifierButton.setIconAlign(Style.IconAlign.TOP);
+        modifierButton.setIconStyle("modifierClientCss");
+        modifierButton.setScale(Style.ButtonScale.LARGE);
+        
+        
+        
          handlecancelButtonCLick();
+         handlesavedButtonClick();
+         handlemodifierButtonClick();
         
         addButton(savedButton);
         addButton(cancelButton);
+        addButton(modifierButton);
         
     }
     
@@ -132,6 +187,7 @@ public class ClientForm extends FormPanel{
      @Override
      public void componentSelected(ComponentEvent ce) {
             nom.setValue(null);
+            adresse.setValue(null);
             telephone.setValue(null);
             courriel.setValue(null);
             localisation.setValue(null);
@@ -144,6 +200,46 @@ public class ClientForm extends FormPanel{
         });
     
    
+    }
+    
+    private void handlesavedButtonClick(){
+        
+        savedButton.addSelectionListener(new SelectionListener(){
+
+     @Override
+     public void componentSelected(ComponentEvent ce) {
+         
+         clientsDTO.setNomClient(nom.getValue());
+         clientsDTO.setAdresse(adresse.getValue());
+         clientsDTO.setTelephone(telephone.getValue());
+         clientsDTO.setCourriel(courriel.getValue());
+         clientsDTO.setLocalisation(localisation.getValue());
+         clientsDTO.setActivites(activites.getValue());
+         clientsDTO.setCorrespondant(nom_correspondant.getValue());
+         clientsDTO.setFonctionCorrespondant(fonction_correpondant.getValue());
+         clientsDTO.setContactCorrespondant(contact_correspondant.getValue());
+         clientsDTO.setCourrielCorrespondant(courriel_correspondant.getValue());
+         SapressiService.addClient(clientsDTO, callback);
+         clear();
+          }
+        });
+    
+    }
+    
+    private void handlemodifierButtonClick(){
+    
+            
+            modifierButton.addSelectionListener(new SelectionListener(){
+
+     @Override
+     public void componentSelected(ComponentEvent ce) {
+         
+        ModifyClientWindow modifyClientWindow = new ModifyClientWindow();
+        modifyClientWindow.show();
+          }
+        });
+    
+    
     }
     
     public ClientForm(){

@@ -71,6 +71,7 @@ public class RemoveUserWindow extends Window{
         btnRemove.setIconStyle("removeGroupeCss");
         btnRemove.setIconAlign(Style.IconAlign.TOP);
         btnRemove.setScale(Style.ButtonScale.LARGE);
+        
         ToolTipConfig btnRemoveToolTipConfig=new ToolTipConfig();
         btnRemoveToolTipConfig.setTitle("Retirer");
         btnRemoveToolTipConfig.setText("Ce bouton vous permet de retirer des utilisateurs");

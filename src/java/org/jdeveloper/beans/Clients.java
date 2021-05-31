@@ -6,9 +6,7 @@
 package org.jdeveloper.beans;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,19 +14,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author goudjanou
  */
 @Entity
-@Table(name = "clients")
+@Table(name = "Clients")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Clients.findAll", query = "SELECT c FROM Clients c")
@@ -42,7 +37,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Clients.findByCorrespondant", query = "SELECT c FROM Clients c WHERE c.correspondant = :correspondant")
     , @NamedQuery(name = "Clients.findByFonctionCorrespondant", query = "SELECT c FROM Clients c WHERE c.fonctionCorrespondant = :fonctionCorrespondant")
     , @NamedQuery(name = "Clients.findByContactCorrespondant", query = "SELECT c FROM Clients c WHERE c.contactCorrespondant = :contactCorrespondant")
-    , @NamedQuery(name = "Clients.findByCourrielCorrespondant", query = "SELECT c FROM Clients c WHERE c.courrielCorrespondant = :courrielCorrespondant")})
+    , @NamedQuery(name = "Clients.findByCourrielCorrespondant", query = "SELECT c FROM Clients c WHERE c.courrielCorrespondant = :courrielCorrespondant")
+    , @NamedQuery(name = "Clients.findByClientNameParameter" , query="SELECT c.idClients FROM Clients c WHERE c.nomClient = :nomClient")})
 public class Clients implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,80 +47,42 @@ public class Clients implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_clients")
     private Integer idClients;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     @Column(name = "nom_client")
     private String nomClient;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     @Column(name = "adresse")
     private String adresse;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     @Column(name = "telephone")
     private String telephone;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     @Column(name = "courriel")
     private String courriel;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     @Column(name = "localisation")
     private String localisation;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 300)
+    @Size(max = 100)
     @Column(name = "activites")
     private String activites;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     @Column(name = "correspondant")
     private String correspondant;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     @Column(name = "fonction_correspondant")
     private String fonctionCorrespondant;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     @Column(name = "contact_correspondant")
     private String contactCorrespondant;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     @Column(name = "courriel_correspondant")
     private String courrielCorrespondant;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idClients")
-    private List<Commandes> commandesList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idClients")
-    private List<Prospection> prospectionList;
 
     public Clients() {
     }
 
     public Clients(Integer idClients) {
         this.idClients = idClients;
-    }
-
-    public Clients(Integer idClients, String nomClient, String adresse, String telephone, String courriel, String localisation, String activites, String correspondant, String fonctionCorrespondant, String contactCorrespondant, String courrielCorrespondant) {
-        this.idClients = idClients;
-        this.nomClient = nomClient;
-        this.adresse = adresse;
-        this.telephone = telephone;
-        this.courriel = courriel;
-        this.localisation = localisation;
-        this.activites = activites;
-        this.correspondant = correspondant;
-        this.fonctionCorrespondant = fonctionCorrespondant;
-        this.contactCorrespondant = contactCorrespondant;
-        this.courrielCorrespondant = courrielCorrespondant;
     }
 
     public Integer getIdClients() {
@@ -213,24 +171,6 @@ public class Clients implements Serializable {
 
     public void setCourrielCorrespondant(String courrielCorrespondant) {
         this.courrielCorrespondant = courrielCorrespondant;
-    }
-
-    @XmlTransient
-    public List<Commandes> getCommandesList() {
-        return commandesList;
-    }
-
-    public void setCommandesList(List<Commandes> commandesList) {
-        this.commandesList = commandesList;
-    }
-
-    @XmlTransient
-    public List<Prospection> getProspectionList() {
-        return prospectionList;
-    }
-
-    public void setProspectionList(List<Prospection> prospectionList) {
-        this.prospectionList = prospectionList;
     }
 
     @Override

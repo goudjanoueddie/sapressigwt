@@ -3,6 +3,7 @@ package org.jdeveloper.client.rpc;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import java.util.List;
+import org.jdeveloper.client.dto.ClientDTO;
 import org.jdeveloper.client.dto.EmployeDTO;
 import org.jdeveloper.client.dto.GroupuserDTO;
 import org.jdeveloper.client.dto.ProspectionDTO;
@@ -34,6 +35,13 @@ public interface GWTServiceAsync {
 
     public void addProspection(ProspectionDTO prospectionDTO, AsyncCallback<java.lang.Boolean> asyncCallback);
 
+    public void addClient(ClientDTO clientDTO, AsyncCallback<java.lang.Boolean> asyncCallback);
+
+    public void getAllClientName(AsyncCallback<List<String>> asyncCallback);
+
+    public void getIdClient(String clientName, AsyncCallback<Integer> asyncCallback);
+
+    public void findCLient(int clientId, AsyncCallback<ClientDTO> asyncCallback);
 
 
 

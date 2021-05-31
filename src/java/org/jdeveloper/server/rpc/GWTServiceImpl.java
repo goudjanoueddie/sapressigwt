@@ -5,15 +5,18 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jdeveloper.beans.Clients;
 import org.jdeveloper.beans.Employes;
 import org.jdeveloper.beans.Groupuser;
 import org.jdeveloper.beans.User;
+import org.jdeveloper.client.dto.ClientDTO;
 import org.jdeveloper.client.dto.EmployeDTO;
 import org.jdeveloper.client.dto.GroupuserDTO;
 import org.jdeveloper.client.dto.ProspectionDTO;
 import org.jdeveloper.client.dto.UserDTO;
 
 import org.jdeveloper.client.rpc.GWTService;
+import org.jdeveloper.controller.ClientsJpaController;
 import org.jdeveloper.controller.EmployesJpaController;
 import org.jdeveloper.controller.GroupuserJpaController;
 import org.jdeveloper.controller.UserJpaController;
@@ -163,5 +166,76 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
     @Override
     public boolean addProspection(ProspectionDTO prospectionDTO) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean addClient(ClientDTO clientDTO) {
+        
+        ClientsJpaController clientsJpaController = new ClientsJpaController();
+        Clients clients = new Clients();
+        clients.setNomClient(clientDTO.getNomClient());
+        clients.setAdresse(clientDTO.getAdresse());
+        clients.setTelephone(clientDTO.getTelephone());
+        clients.setCourriel(clientDTO.getCourriel());
+        clients.setLocalisation(clientDTO.getLocalisation());
+        clients.setActivites(clientDTO.getActivites());
+        clients.setCorrespondant(clientDTO.getCorrespondant());
+        clients.setFonctionCorrespondant(clientDTO.getFonctionCorrespondant());
+        clients.setContactCorrespondant(clientDTO.getContactCorrespondant());
+        clients.setCourrielCorrespondant(clientDTO.getCourrielCorrespondant());
+        boolean added = false;
+        
+        try{
+        
+            clientsJpaController.create(clients);
+            added = true;
+            
+        }catch(RollbackFailureException ex){
+        Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }catch(Exception ex){
+        Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }         
+       return added;
+    }
+
+    @Override
+    public List<String> getAllClientName() {
+        List<String> resultatQuery;
+        ClientsJpaController clientsJpaController = new ClientsJpaController();
+        resultatQuery = clientsJpaController.getAllClientsNames();
+        return resultatQuery;
+    }
+
+    @Override
+    public Integer getIdClient(String clientName) {
+        Integer userId;
+        ClientsJpaController clientsJpaController = new ClientsJpaController();
+        userId = clientsJpaController.getIdClient(clientName);
+        return userId;
+    }
+
+    @Override
+    public ClientDTO findCLient(int clientId) {
+        
+        ClientsJpaController clientsJpaController = new ClientsJpaController();
+        Clients client = clientsJpaController.findClients(clientId);
+        ClientDTO clientsDTO = null;
+        
+        if(client != null){
+            clientsDTO = new ClientDTO();
+            clientsDTO.setIdClients(client.getIdClients());
+            clientsDTO.setNomClient(client.getNomClient());
+            clientsDTO.setAdresse(client.getAdresse());
+            clientsDTO.setTelephone(client.getTelephone());
+            clientsDTO.setCourriel(client.getCourriel());
+            clientsDTO.setLocalisation(client.getLocalisation());
+            clientsDTO.setActivites(client.getActivites());
+            clientsDTO.setCorrespondant(client.getCorrespondant());
+            clientsDTO.setFonctionCorrespondant(client.getFonctionCorrespondant());
+            clientsDTO.setContactCorrespondant(client.getContactCorrespondant());
+            clientsDTO.setCourrielCorrespondant(client.getCourrielCorrespondant());
+        }
+        
+        return clientsDTO;
     }
 }
