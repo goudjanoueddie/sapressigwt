@@ -28,6 +28,14 @@ public class ModifyClientWindowFinal extends Window {
         setResizable(false);
         setLayout(new FitLayout());
     }
+
+    public ModifyClientFormFinal getClientForm() {
+        return clientForm;
+    }
+
+    public void setClientForm(ModifyClientFormFinal clientForm) {
+        this.clientForm = clientForm;
+    }
     
     
     protected void onRender(Element parent ,int pos){

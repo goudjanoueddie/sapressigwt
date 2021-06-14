@@ -73,6 +73,37 @@ public class ClientsJpaController implements Serializable {
 
     public void edit(Clients clients) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         
+        EntityManager em = null;
+        try {
+            utx.begin();
+            em = getEntityManager();
+            clients = em.merge(clients);
+            utx.commit();
+            /*em=getEntityManager();
+            em.getTransaction().begin();
+            clients = em.merge(clients);
+            em.getTransaction().commit();*/
+        } catch (Exception ex) {
+            try {
+                utx.rollback();
+            } catch (Exception re) {
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+            }
+            String msg = ex.getLocalizedMessage();
+            if (msg == null || msg.length() == 0) {
+                Integer id = clients.getIdClients();
+                if (findClients(id) == null) {
+                    throw new NonexistentEntityException("The employes with id " + id + " no longer exists.");
+                }
+            }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        
+        
     }
 
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {

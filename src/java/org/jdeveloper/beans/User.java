@@ -34,8 +34,12 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.name = :name")
     , @NamedQuery(name = "User.findByUserName", query = "SELECT u FROM User u WHERE u.userName = :userName")
     , @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password")
-    , @NamedQuery(name = "User.findByUserNameParameter", query = "SELECT u.id FROM User u WHERE u.userName = :userName")})
+    , @NamedQuery(name = "User.findByUserNameParameter", query = "SELECT u.id FROM User u WHERE u.userName = :userName")
+    , @NamedQuery(name = "User.findByUserNameAndPassword", query = "SELECT u FROM User u WHERE u.userName = :userName and u.password = :password")})
+    //, @NamedQuery(name = "User.findByUserNameAndPassword", query = "SELECT u.idEmploye FROM User u WHERE u.userName = :userName and u.password = :password")})
 public class User implements Serializable {
+
+    
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -61,6 +65,9 @@ public class User implements Serializable {
     @JoinColumn(name = "Group_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Groupuser groupid;
+    @JoinColumn(name = "id_employe", referencedColumnName = "id_employe")
+    @ManyToOne(optional = false)
+    private Employes idEmploye;
 
     public User() {
     }
@@ -139,6 +146,14 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "org.jdeveloper.beans.User[ id=" + id + " ]";
+    }
+
+    public Employes getIdEmploye() {
+        return idEmploye;
+    }
+
+    public void setIdEmploye(Employes idEmploye) {
+        this.idEmploye = idEmploye;
     }
     
 }

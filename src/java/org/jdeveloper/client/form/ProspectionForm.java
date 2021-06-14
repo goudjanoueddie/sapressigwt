@@ -5,8 +5,15 @@
  */
 package org.jdeveloper.client.form;
 
+import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style;
+import com.extjs.gxt.ui.client.event.BaseEvent;
+import com.extjs.gxt.ui.client.event.ComponentEvent;
+import com.extjs.gxt.ui.client.event.Events;
+import com.extjs.gxt.ui.client.event.Listener;
+import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
+import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.DateField;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
@@ -17,6 +24,12 @@ import com.extjs.gxt.ui.client.widget.layout.ColumnLayout;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.extjs.gxt.ui.client.widget.tips.ToolTipConfig;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import java.util.List;
+import org.jdeveloper.client.SapressiConstant;
+import org.jdeveloper.client.components.AddUserWindow;
+import org.jdeveloper.client.dto.ProspectionDTO;
+import org.jdeveloper.client.rpc.GWTServiceAsync;
 
 /**
  *
@@ -31,9 +44,95 @@ public class ProspectionForm extends FormPanel{
     SimpleComboBox id_commerciaux = new SimpleComboBox();
     SimpleComboBox id_clients = new SimpleComboBox();
     
+    ProspectionDTO prospectionDTO = new ProspectionDTO();
+    
     //Button savedButton=new Button("Enregistrer");
     Button savedButton=new Button("");
     Button cancelButton=new Button("");
+    
+    final GWTServiceAsync SapressiService=Registry.get(SapressiConstant.SAPRESSI_SERVICE);
+    
+    private Integer clientId;
+    
+    final AsyncCallback<List<String>> callbackIdCommercial = new AsyncCallback<List<String>>(){
+        
+        MessageBox messageBox = new MessageBox();
+      
+        @Override
+        public void onFailure(Throwable caught) {
+            messageBox.setMessage(caught.getMessage());
+        }
+
+        @Override
+        public void onSuccess(List<String> result) {
+            id_commerciaux.add(result);
+        }
+    
+    
+    };
+    
+    final AsyncCallback<List<String>> callBackClientName = new AsyncCallback<List<String>> (){
+        
+        MessageBox messageBox = new MessageBox();
+        
+        @Override
+        public void onFailure(Throwable caught) {
+            messageBox.setMessage(caught.getMessage());
+        }
+
+        @Override
+        public void onSuccess(List<String> result) {
+            id_clients.add(result);
+        }
+    
+    
+    };
+    
+    AsyncCallback<Integer> callbackIdClient = new AsyncCallback<Integer>(){
+        
+        MessageBox messageBox = new MessageBox();
+        
+        @Override
+        public void onFailure(Throwable caught) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void onSuccess(Integer result) {
+            
+            clientId = result;
+            
+            /*messageBox.setMessage(clientId.toString());
+            messageBox.show();*/
+        }
+    
+    };
+    
+     final AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+        
+        MessageBox messageBox = new MessageBox();
+        
+        @Override
+        public void onFailure(Throwable caught) {
+            messageBox.setMessage("Impossible d'effectuer cet enregistrement");
+            messageBox.show();
+        }
+
+        @Override
+        public void onSuccess(Boolean result) {
+            
+            if(result){
+                messageBox.setMessage("Enregistrement effectué avec succès");
+            
+            }else{
+                messageBox.setMessage("Impossible d'effectuer cet enregistrement");
+            }
+            
+            messageBox.show();
+        }
+    };
+     
+     
     
     
     private void createForm(){
@@ -107,8 +206,11 @@ public class ProspectionForm extends FormPanel{
         cancelButton.setIconStyle("annulerCss");
         cancelButton.setScale(Style.ButtonScale.LARGE);
         
+        SapressiService.getAllCommercialNames(callbackIdCommercial);
+        SapressiService.getAllClientName(callBackClientName);
         
-        
+        handleComboChangeEvent();
+        handlesavedButtonClick();
         addButton(savedButton);
         addButton(cancelButton);
     
@@ -116,6 +218,41 @@ public class ProspectionForm extends FormPanel{
     
     public ProspectionForm(){
         createForm();
+    }
+    
+    private void handleComboChangeEvent(){
+        
+        id_clients.addListener(Events.SelectionChange,new
+        Listener<BaseEvent>(){
+        @Override
+        public void handleEvent(BaseEvent be)
+        {
+            SapressiService.getIdClient(id_clients.getSimpleValue().toString(), callbackIdClient);
+        }
+        });
+    
+    }
+    
+    private void handlesavedButtonClick(){
+    
+        savedButton.addSelectionListener(new SelectionListener(){
+            
+            @Override
+            public void componentSelected(ComponentEvent ce) {
+                
+                prospectionDTO.setDateProspetion(dateProspection.getValue());
+                prospectionDTO.setType(type_prospection.getSimpleValue().toString());
+                prospectionDTO.setId_employe(id_commerciaux.getSimpleValue().toString());
+                prospectionDTO.setId_clients(clientId);
+                prospectionDTO.setObjectifProspection(objectifAppelVisite.getValue());
+                prospectionDTO.setBesoinsAttenteClient(besoinAttenteClient.getValue());
+                SapressiService.addProspection(prospectionDTO, callback);
+                clear();
+               
+                
+            }
+        });  
+    
     }
     
 }

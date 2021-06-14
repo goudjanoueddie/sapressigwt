@@ -5,6 +5,7 @@
  */
 package org.jdeveloper.client;
 
+import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
@@ -13,12 +14,15 @@ import com.extjs.gxt.ui.client.event.KeyListener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.util.IconHelper;
 import com.extjs.gxt.ui.client.widget.Dialog;
+import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.extjs.gxt.ui.client.widget.Status;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.extjs.gxt.ui.client.widget.toolbar.FillToolItem;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import org.jdeveloper.client.rpc.GWTServiceAsync;
 
 /**
  *
@@ -32,6 +36,35 @@ public class LoginDialog extends Dialog{
     protected Button reset;
     protected Button login;
     protected Status status;
+    GWTServiceAsync SapressiService=Registry.get(SapressiConstant.SAPRESSI_SERVICE);
+    
+     final AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+        
+        MessageBox messageBox = new MessageBox();
+        
+        @Override
+        public void onFailure(Throwable caught) {
+            messageBox.setMessage(caught.toString());
+            messageBox.show();
+        }
+
+        @Override
+        public void onSuccess(Boolean result) {
+            
+            if(result){
+            LoginDialog.this.hide();
+            MainScreen.getInstance();
+            
+            }else{
+                messageBox.setMessage("Vous n'avez pas les acces requis");
+                messageBox.show();
+            }
+            
+            
+            
+            
+        }
+    };
     
     
     public LoginDialog(){
@@ -107,7 +140,8 @@ public class LoginDialog extends Dialog{
             
             @Override
             public void componentSelected(ButtonEvent ce) {
-                onSubmit();
+                //onSubmit();
+                SapressiService.login(userName.getValue(), password.getValue(), callback);
             }
         
         });
@@ -128,8 +162,9 @@ public class LoginDialog extends Dialog{
 
       @Override
       public void run() {
-        LoginDialog.this.hide();
-        MainScreen.getInstance();
+        /*LoginDialog.this.hide();
+        MainScreen.getInstance();*/
+        SapressiService.login(userName.getValue(), password.getValue(), callback);
       }
 
     };

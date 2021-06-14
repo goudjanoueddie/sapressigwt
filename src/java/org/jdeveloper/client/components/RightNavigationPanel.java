@@ -24,15 +24,21 @@ import org.jdeveloper.client.form.EmployeeForm;
  */
 public class RightNavigationPanel extends ContentPanel {
     
-    private Button modifierCibleManagerEntreprise=new Button("Seuil Manager Entreprise");
+    private Button modifierCibleManagerEntreprise=new Button("Manager Entreprise");
+    private Button modifierCiblePiloterQualiter = new Button("Qualite");
+    private Button modifierCibleCommercial = new Button("Commercial");
+    private Button modifierCibleFormation = new Button("Formation");
+    private Button modifierCibleControle = new Button("Contrôle");
+    private Button modifierEquipement = new Button("Equipement");
+    private Button modifierAchatEtInfrastructure = new Button("Achat & Infrastructure");
+    private Button modifierGRH =new Button("GRH");
+    
     private Button ajouterGroupe=new Button("Ajouter Groupe");
     private Button ajouterUser = new Button("Ajouter Utilisateur");
     private Button ajouterEmployeeButton=new Button("Ajouter Employe");
     private Button chercherButton=new Button("Chercher");
-   // private Button updateButton=new Button("Update");
     private Button deleteButton=new Button("Delete");
     
-    //final  AddGroupePopup sapressiPopup=new AddGroupePopup();
     
     
     
@@ -68,8 +74,91 @@ public class RightNavigationPanel extends ContentPanel {
                  
             }
         });
-        
+       
         setupContentPanel.add(modifierCibleManagerEntreprise,new RowData(1,-1,new Margins(5,5,10,5)));
+        
+        modifierCiblePiloterQualiter.setIconStyle("seuilPiloterQualiterCss");
+        modifierCiblePiloterQualiter.setScale(Style.ButtonScale.LARGE);
+        modifierCiblePiloterQualiter.addSelectionListener(new SelectionListener(){
+
+            @Override
+            public void componentSelected(ComponentEvent ce) {
+                 
+            }
+        });
+        setupContentPanel.add(modifierCiblePiloterQualiter,new RowData(1,-1,new Margins(5,5,10,5)));
+        
+        
+        modifierCibleCommercial.setIconStyle("seuilCommercial");
+        modifierCibleCommercial.setScale(Style.ButtonScale.LARGE);
+        modifierCibleCommercial.addSelectionListener(new SelectionListener(){
+
+            @Override
+            public void componentSelected(ComponentEvent ce) {
+                 CibleCommandeWindows cibleCommandeWindows = new CibleCommandeWindows();
+                 cibleCommandeWindows.show();
+            }
+        });
+        setupContentPanel.add(modifierCibleCommercial,new RowData(1,-1,new Margins(5,5,10,5)));
+        
+        
+        modifierCibleFormation.setIconStyle("seuilFormation");
+        modifierCibleFormation.setScale(Style.ButtonScale.LARGE);
+        modifierCibleFormation.addSelectionListener(new SelectionListener(){
+
+            @Override
+            public void componentSelected(ComponentEvent ce) {
+                 
+            }
+        });
+        setupContentPanel.add(modifierCibleFormation,new RowData(1,-1,new Margins(5,5,10,5)));
+        
+        
+        modifierCibleControle.setIconStyle("seuilControl");
+        modifierCibleControle.setScale(Style.ButtonScale.LARGE);
+        modifierCibleControle.addSelectionListener(new SelectionListener(){
+
+            @Override
+            public void componentSelected(ComponentEvent ce) {
+                 
+            }
+        });
+        setupContentPanel.add(modifierCibleControle,new RowData(1,-1,new Margins(5,5,10,5)));
+        
+        
+        modifierEquipement.setIconStyle("seuilEquipement");
+        modifierEquipement.setScale(Style.ButtonScale.LARGE);
+        modifierEquipement.addSelectionListener(new SelectionListener(){
+
+            @Override
+            public void componentSelected(ComponentEvent ce) {
+                 
+            }
+        });
+        setupContentPanel.add(modifierEquipement,new RowData(1,-1,new Margins(5,5,10,5)));
+        
+        modifierAchatEtInfrastructure.setIconStyle("seuilAchatEtInfrastructure");
+        modifierAchatEtInfrastructure.setScale(Style.ButtonScale.LARGE);
+        modifierAchatEtInfrastructure.addSelectionListener(new SelectionListener(){
+
+            @Override
+            public void componentSelected(ComponentEvent ce) {
+                 
+            }
+        });
+        setupContentPanel.add(modifierAchatEtInfrastructure,new RowData(1,-1,new Margins(5,5,10,5)));
+        
+        modifierGRH.setIconStyle("seuilGRH");
+        modifierGRH.setScale(Style.ButtonScale.LARGE);
+        modifierGRH.addSelectionListener(new SelectionListener(){
+
+            @Override
+            public void componentSelected(ComponentEvent ce) {
+                 
+            }
+        });
+        setupContentPanel.add(modifierGRH,new RowData(1,-1,new Margins(5,5,10,5)));
+        
         
         
         

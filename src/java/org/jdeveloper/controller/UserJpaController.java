@@ -99,34 +99,6 @@ public class UserJpaController implements Serializable {
             }
         }
         
-        /*EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            User user;
-            try {
-                user = em.getReference(User.class, userId);
-                user.getId();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The groupuser with id " + userId + " no longer exists.", enfe);
-            }
-            
-            em.remove(user);
-            utx.commit();
-            }
-           
-         catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }*/
     }
 
     public List<User> findUserEntities() {
@@ -205,6 +177,35 @@ public class UserJpaController implements Serializable {
         }finally{
             em.close();
         }
+    }
+    
+    public boolean findByUSerNameAndPassword(String userName, String password)throws Exception{
+        
+        EntityManager em =getEntityManager();
+        boolean isPresent =false;
+        User user;
+        //String idEmploye;
+        try{
+         
+            user = (User)em.createNamedQuery("User.findByUserNameAndPassword").setParameter("userName", userName)
+                                                                              .setParameter("password", password)
+                                                                              .getSingleResult() ;
+            
+            /*idEmploye = (String)em.createNamedQuery("User.findByUserNameAndPassword").setParameter("userName", userName)
+                                                                              .setParameter("password", password)
+                                                                              .getSingleResult() ;*/
+            if(user !=null){
+            isPresent = true;
+            }
+            
+         }catch (Exception ex) {
+             throw ex;
+         
+         }finally{
+            em.close();
+        }
+        
+        return isPresent;
     }
     
 }

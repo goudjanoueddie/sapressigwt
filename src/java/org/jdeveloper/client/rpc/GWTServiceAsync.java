@@ -15,8 +15,6 @@ import org.jdeveloper.client.dto.UserDTO;
  */
 public interface GWTServiceAsync {
 
-    public void myMethod(String s, AsyncCallback<String> callback);
-
     public void addEmploye(EmployeDTO employeDTO, AsyncCallback<java.lang.Boolean> asyncCallback);
     
     public void addGroup(GroupuserDTO groupDTO, AsyncCallback<java.lang.Boolean> asyncCallback);
@@ -43,7 +41,15 @@ public interface GWTServiceAsync {
 
     public void findCLient(int clientId, AsyncCallback<ClientDTO> asyncCallback);
 
+    public void updateClient(ClientDTO clientDTO, AsyncCallback<java.lang.Boolean> asyncCallback);
 
+    public void getAllCommercialNames(AsyncCallback<List<String>> asyncCallback);
+
+    public void getAllEmployesId(AsyncCallback<List<String>> asyncCallback);
+
+    public void getEmployeName(String employeId, AsyncCallback<String> asyncCallback);
+
+    public void login(String userName, String password, AsyncCallback<java.lang.Boolean> asyncCallback);
 
     
 }

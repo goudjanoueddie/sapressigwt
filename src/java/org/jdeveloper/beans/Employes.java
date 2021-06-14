@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -28,12 +29,12 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author goudjanou
  */
 @Entity
-@Table(name = "employes")
+@Table(name = "Employes")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Employes.findAll", query = "SELECT e FROM Employes e")
     , @NamedQuery(name = "Employes.findByIdEmploye", query = "SELECT e FROM Employes e WHERE e.idEmploye = :idEmploye")
-    , @NamedQuery(name = "Employes.findByNomEmploye", query = "SELECT e FROM Employes e WHERE e.nomEmploye = :nomEmploye")
+    , @NamedQuery(name = "Employes.findByNomEmploye", query = "SELECT e.nomEmploye FROM Employes e WHERE e.idEmploye = :idEmploye")
     , @NamedQuery(name = "Employes.findByPrenomEmploye", query = "SELECT e FROM Employes e WHERE e.prenomEmploye = :prenomEmploye")
     , @NamedQuery(name = "Employes.findByTelephone", query = "SELECT e FROM Employes e WHERE e.telephone = :telephone")
     , @NamedQuery(name = "Employes.findByCourriel", query = "SELECT e FROM Employes e WHERE e.courriel = :courriel")
@@ -42,6 +43,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Employes.findByDepartement", query = "SELECT e FROM Employes e WHERE e.departement = :departement")
     , @NamedQuery(name = "Employes.findByAdresse", query = "SELECT e FROM Employes e WHERE e.adresse = :adresse")})
 public class Employes implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmploye")
+    private List<User> userBackupList;
 
     @OneToMany(mappedBy = "idEmploye")
     private List<Prospection> prospectionList;
@@ -189,6 +193,15 @@ public class Employes implements Serializable {
 
     public void setProspectionList(List<Prospection> prospectionList) {
         this.prospectionList = prospectionList;
+    }
+
+    @XmlTransient
+    public List<User> getUserBackupList() {
+        return userBackupList;
+    }
+
+    public void setUserBackupList(List<User> userBackupList) {
+        this.userBackupList = userBackupList;
     }
     
 }

@@ -35,7 +35,7 @@ import org.jdeveloper.client.rpc.GWTServiceAsync;
 public class ModifyClientForm extends FormPanel{
     
     private final SimpleComboBox modifyClientField = new SimpleComboBox();
-    private final Button btnModifier = new Button("");
+//    private final Button btnModifier = new Button("");
     final GWTServiceAsync SapressiService = Registry.get(SapressiConstant.SAPRESSI_SERVICE);
     public static Integer clientId;
     
@@ -65,35 +65,7 @@ public class ModifyClientForm extends FormPanel{
     
     };
     
-    AsyncCallback<ClientDTO> callBackFind = new AsyncCallback<ClientDTO>(){
-        @Override
-        public void onFailure(Throwable caught) {
-            MessageBox messageBox = new MessageBox();
-            messageBox.setMessage("Une erreur est survenue!!!");
-            messageBox.show();
-        }
-
-        @Override
-        public void onSuccess(ClientDTO result) {
-            
-            ClientDTO clientDTO;
-            clientDTO = result;
-            MessageBox messageBox = new MessageBox();
-            
-            if(result !=null){
-                /*messageBox.setMessage("Client retrieval");
-                messageBox.show();*/
-                
-                ModifyClientWindowFinal modifyClientWindowFinal = new ModifyClientWindowFinal();
-                modifyClientWindowFinal.show();
-            }else {
-                messageBox.setMessage("Aucun client trouve");
-                messageBox.show();
-            }
-            
-        }
-    
-    };
+   
     
     
     public ModifyClientForm(){
@@ -102,19 +74,8 @@ public class ModifyClientForm extends FormPanel{
         modifyClientField.setFieldLabel("Client");
         SapressiService.getAllClientName(callBackClientName);
         
-        ToolTipConfig modifierButtonToolTipConfig=new ToolTipConfig();
-        modifierButtonToolTipConfig.setTitle("Chercher");
-        modifierButtonToolTipConfig.setText("Ce bouton vous permet de chercher un client");
-        
-        btnModifier.setToolTip(modifierButtonToolTipConfig);
-        btnModifier.setIconAlign(Style.IconAlign.TOP);
-        btnModifier.setIconStyle("searchCss");
-        btnModifier.setScale(Style.ButtonScale.LARGE);
-        
         handleComboChangeEvent();
-        handlebtnModifierButton();
         add(modifyClientField);
-        addButton(btnModifier);
         
     }
     
@@ -131,7 +92,7 @@ public class ModifyClientForm extends FormPanel{
         });
     }
     
-    private void handlebtnModifierButton(){
+    /*private void handlebtnModifierButton(){
     
         btnModifier.addSelectionListener(new SelectionListener(){
             
@@ -143,7 +104,7 @@ public class ModifyClientForm extends FormPanel{
         
         });
     
-    }
+    }*/
     
     
     

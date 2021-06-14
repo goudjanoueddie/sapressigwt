@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import org.jdeveloper.beans.Clients;
 import org.jdeveloper.beans.Employes;
 import org.jdeveloper.beans.Groupuser;
+import org.jdeveloper.beans.Prospection;
 import org.jdeveloper.beans.User;
 import org.jdeveloper.client.dto.ClientDTO;
 import org.jdeveloper.client.dto.EmployeDTO;
@@ -19,8 +20,10 @@ import org.jdeveloper.client.rpc.GWTService;
 import org.jdeveloper.controller.ClientsJpaController;
 import org.jdeveloper.controller.EmployesJpaController;
 import org.jdeveloper.controller.GroupuserJpaController;
+import org.jdeveloper.controller.ProspectionJpaController;
 import org.jdeveloper.controller.UserJpaController;
 import org.jdeveloper.controller.exceptions.IllegalOrphanException;
+import org.jdeveloper.controller.exceptions.NonexistentEntityException;
 import org.jdeveloper.controller.exceptions.PreexistingEntityException;
 import org.jdeveloper.controller.exceptions.RollbackFailureException;
 
@@ -30,10 +33,6 @@ import org.jdeveloper.controller.exceptions.RollbackFailureException;
  */
 public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 
-    public String myMethod(String s) {
-        // Do something interesting with 's' here on the server.
-        return "Server says: " + s;
-    }
 
     @Override
     public boolean addEmploye(EmployeDTO employeDTO) {
@@ -96,6 +95,7 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
         user.setUserName(userDTO.getUserName());
         user.setPassword(userDTO.getPassword());
         user.setGroupid(new Groupuser(userDTO.getGroup_id()));
+        user.setIdEmploye(new Employes(userDTO.getEmploye_id()));
         UserJpaController userJpaController=new UserJpaController();
         boolean added = false;
         
@@ -165,7 +165,25 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
 
     @Override
     public boolean addProspection(ProspectionDTO prospectionDTO) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ProspectionJpaController prospectinonJpaController = new ProspectionJpaController();
+        Prospection prospection = new Prospection();
+        prospection.setDateProspection(prospectionDTO.getDateProspetion());
+        prospection.setObjectifProspection(prospectionDTO.getObjectifProspection());
+        prospection.setBesoinsAttenteClient(prospectionDTO.getBesoinsAttenteClient());
+        prospection.setType(prospectionDTO.getType());
+        prospection.setIdClients(new Clients(prospectionDTO.getId_clients()));
+        prospection.setIdEmploye(new Employes(prospectionDTO.getId_employe()));
+        boolean added =false;
+        
+        try{
+            prospectinonJpaController.create(prospection);
+            added = true;
+        }catch(RollbackFailureException ex){
+        Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }catch(Exception ex){
+        Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }         
+       return added;
     }
 
     @Override
@@ -238,4 +256,61 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
         
         return clientsDTO;
     }
+
+    @Override
+    public boolean updateClient(ClientDTO clientDTO) {
+        
+        ClientsJpaController clientsJpaController = new ClientsJpaController();
+        boolean updated = false;
+        try{
+            clientsJpaController.edit(new Clients(clientDTO));
+            updated = true;
+        } catch (NonexistentEntityException ex) {
+            Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RollbackFailureException ex) {
+            Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return updated;
+    }
+
+    @Override
+    public List<String> getAllCommercialNames() {
+        List<String> resultatQuery;
+        ProspectionJpaController  prospectionJpaController  = new ProspectionJpaController();
+        resultatQuery = prospectionJpaController.getAllCommercial();
+        return resultatQuery; 
+    }
+
+    @Override
+    public List<String> getAllEmployesId() {
+        List<String> resultatQuery;
+        EmployesJpaController employeJpaController = new EmployesJpaController();
+        resultatQuery = employeJpaController.getAllEmployesId();
+        return resultatQuery;
+    }
+
+    @Override
+    public String getEmployeName(String employeId) {
+        String employeName;
+        EmployesJpaController employeJpaController = new EmployesJpaController();
+        employeName = employeJpaController.getNameEmploye(employeId);
+        return employeName;
+    }
+
+    @Override
+    public boolean login(String userName, String password) {
+        
+        boolean isPresent = false;
+        UserJpaController userJpaController = new UserJpaController();
+        try {
+            isPresent = userJpaController.findByUSerNameAndPassword(userName, password);
+        } catch (Exception ex) {
+            //Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return isPresent;     
+    }
 }
+
+

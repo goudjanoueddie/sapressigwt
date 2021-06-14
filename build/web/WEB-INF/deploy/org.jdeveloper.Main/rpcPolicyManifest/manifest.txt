@@ -1,0 +1,3 @@
+# Module org.jdeveloper.Main
+# RPC service class, partial path of RPC policy file
+org.jdeveloper.client.rpc.GWTService, 13D76B0C80D317059551AA7E61A1365D.gwt.rpc

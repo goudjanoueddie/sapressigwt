@@ -166,4 +166,35 @@ public class EmployesJpaController implements Serializable {
         }
     }
     
+    public List<String> getAllEmployesId(){
+        
+        EntityManager em = getEntityManager();
+        List employeIdListe;
+        
+        try{
+            
+            StringBuffer queryString = new StringBuffer();
+            queryString.append("select emp.idEmploye from Employes emp");
+            Query query= em.createQuery(queryString.toString());
+            employeIdListe = query.getResultList();
+        
+        }finally{
+            em.close();
+        }
+    
+        return employeIdListe;
+    }
+    
+    public String getNameEmploye(String IdEmploye){
+    
+        EntityManager em = getEntityManager();
+        String employeName;
+        
+        try{
+            employeName = (String) em.createNamedQuery("Employes.findByNomEmploye").setParameter("idEmploye", IdEmploye).getSingleResult();
+            return employeName;
+        }finally{
+            em.close();
+        }
+    }
 }

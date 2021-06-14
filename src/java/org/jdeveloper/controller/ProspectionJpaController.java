@@ -11,12 +11,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 import org.jdeveloper.beans.Clients;
 import org.jdeveloper.beans.Prospection;
 import org.jdeveloper.controller.exceptions.NonexistentEntityException;
+import org.jdeveloper.controller.exceptions.PreexistingEntityException;
 import org.jdeveloper.controller.exceptions.RollbackFailureException;
 
 /**
@@ -25,18 +27,46 @@ import org.jdeveloper.controller.exceptions.RollbackFailureException;
  */
 public class ProspectionJpaController implements Serializable {
 
-    public ProspectionJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
-        this.emf = emf;
-    }
+    
     private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
+    
+    public ProspectionJpaController(){
+        emf = Persistence.createEntityManagerFactory("TableaudeBordSapressiPU");
+    }
+    
+    public ProspectionJpaController(UserTransaction utx, EntityManagerFactory emf) {
+        this.utx = utx;
+        this.emf = emf;
+    }
 
-    public void create(Prospection prospection) throws RollbackFailureException, Exception {
+    public void create(Prospection prospection) throws PreexistingEntityException,RollbackFailureException, Exception {
+        
+        EntityManager em = null;
+        
+        try{
+            
+            em = getEntityManager();
+            em.getTransaction().begin();
+            em.persist(prospection);
+            em.getTransaction().commit();
+        
+        }catch (Exception ex) {
+            try {
+                //utx.rollback();
+            } catch (Exception re) {
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+            }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
         
     }
 
@@ -92,6 +122,23 @@ public class ProspectionJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+
+    public List<String> getAllCommercial() {
+        
+        EntityManager em = getEntityManager();
+        List commercialListe;
+        
+        try{
+            StringBuffer queryString = new StringBuffer();
+            queryString.append("select Emp.idEmploye from Employes Emp where Emp.departement='Commercial'");
+            Query query = em.createQuery(queryString.toString());
+            commercialListe = query.getResultList();
+        }finally{
+            em.close();
+        }
+        
+        return commercialListe;
     }
     
 }

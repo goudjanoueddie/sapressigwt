@@ -18,12 +18,14 @@ public class UserDTO implements Serializable {
     private String userName;
     private String password;
     private Integer group_id;
+    private String employe_id;
 
-    public UserDTO(String name, String userName, String password, Integer group_id) {
+    public UserDTO(String name, String userName, String password, Integer group_id,String employe_id) {
         this.name = name;
         this.userName = userName;
         this.password = password;
         this.group_id = group_id;
+        this.employe_id = employe_id;
     }
     
     public UserDTO(){
@@ -68,6 +70,14 @@ public class UserDTO implements Serializable {
 
     public void setGroup_id(Integer group_id) {
         this.group_id = group_id;
+    }
+
+    public String getEmploye_id() {
+        return employe_id;
+    }
+
+    public void setEmploye_id(String employe_id) {
+        this.employe_id = employe_id;
     }
     
     

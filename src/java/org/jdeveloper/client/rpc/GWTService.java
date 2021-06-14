@@ -20,8 +20,6 @@ import org.jdeveloper.client.dto.UserDTO;
  */
 @RemoteServiceRelativePath("rpc/gwtservice")
 public interface GWTService extends RemoteService {
-
-    public String myMethod(String s);
     
     public boolean addEmploye(EmployeDTO employeDTO);
     
@@ -48,5 +46,17 @@ public interface GWTService extends RemoteService {
     public Integer getIdClient(String clientName);
     
     public ClientDTO findCLient(int clientId);
+    
+    public boolean updateClient(ClientDTO clientDTO);
+    
+    public List<String> getAllCommercialNames();
+    
+    public List<String> getAllEmployesId();
+    
+    public String getEmployeName(String employeId);
+    
+    public boolean login(String userName , String password);
+    
+    
   
 }

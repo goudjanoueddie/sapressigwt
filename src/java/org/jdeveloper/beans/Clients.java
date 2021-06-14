@@ -17,6 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.jdeveloper.client.dto.ClientDTO;
 
 /**
  *
@@ -83,6 +84,22 @@ public class Clients implements Serializable {
 
     public Clients(Integer idClients) {
         this.idClients = idClients;
+    }
+    
+    public Clients(ClientDTO clientDTO){
+        
+        setIdClients(clientDTO.getIdClients());
+        setNomClient(clientDTO.getNomClient());
+        setAdresse(clientDTO.getAdresse());
+        setTelephone(clientDTO.getTelephone());
+        setCourriel(clientDTO.getCourriel());
+        setLocalisation(clientDTO.getLocalisation());
+        setActivites(clientDTO.getActivites());
+        setCorrespondant(clientDTO.getCorrespondant());
+        setFonctionCorrespondant(clientDTO.getFonctionCorrespondant());
+        setContactCorrespondant(clientDTO.getContactCorrespondant());
+        setCourrielCorrespondant(clientDTO.getCourrielCorrespondant());
+        
     }
 
     public Integer getIdClients() {
@@ -172,6 +189,8 @@ public class Clients implements Serializable {
     public void setCourrielCorrespondant(String courrielCorrespondant) {
         this.courrielCorrespondant = courrielCorrespondant;
     }
+    
+    
 
     @Override
     public int hashCode() {

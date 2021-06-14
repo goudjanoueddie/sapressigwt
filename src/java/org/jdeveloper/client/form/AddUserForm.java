@@ -29,13 +29,14 @@ import org.jdeveloper.client.dto.UserDTO;
 import org.jdeveloper.client.rpc.GWTService;
 import org.jdeveloper.client.rpc.GWTServiceAsync;
 import org.jdeveloper.controller.UserJpaController;
-
+;
 /**
  *
  * @author goudjanou
  */
 public class AddUserForm extends FormPanel{
     
+    private final SimpleComboBox employeId = new SimpleComboBox();
     private final TextField <String> nameTextField = new TextField<String>();
     private final TextField <String> userNameTextField = new TextField<String>();
     private final TextField <String> passwordTextField = new TextField<String>();
@@ -90,7 +91,22 @@ public class AddUserForm extends FormPanel{
     
     };
      
-     MessageBox messageBoxInternal = new MessageBox();
+     AsyncCallback <List<String>> callbackIdEmploye = new AsyncCallback <List<String>>(){
+         
+        @Override
+        public void onFailure(Throwable caught) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void onSuccess(List<String> result) {
+            employeId.add(result);
+        }
+     
+     
+     };
+     
+     //MessageBox messageBoxInternal = new MessageBox();
      
        AsyncCallback<Integer> callbackIdGroup =new AsyncCallback<Integer>(){
          
@@ -105,6 +121,21 @@ public class AddUserForm extends FormPanel{
             groupId =result;
         }
      };
+       
+      AsyncCallback<String> callbackNameEmploye = new AsyncCallback<String>(){
+        @Override
+        public void onFailure(Throwable caught) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void onSuccess(String result) {
+            
+            nameTextField.setValue(result);
+        }
+      
+      
+      };
      
      
      
@@ -112,38 +143,32 @@ public class AddUserForm extends FormPanel{
     public AddUserForm(){
         
         setHeaderVisible(false);
+        employeId.setFieldLabel("ID Employe");
         nameTextField.setFieldLabel("Nom");
+        nameTextField.setEnabled(false);
         userNameTextField.setFieldLabel("Login");
         passwordTextField.setFieldLabel("Password");
         groupeCombo.setFieldLabel("Groupe");
-        
-       SapressiService.getAllGroupName(callbackGroupName);
-        
+        SapressiService.getAllGroupName(callbackGroupName);
+        SapressiService.getAllEmployesId(callbackIdEmploye);
+        add(employeId);
         add(nameTextField);
         add(userNameTextField);
         add(passwordTextField);
         add(groupeCombo);
-        
         handleComboChangeEvent();
+        handleemployeIdComboChangeEvent();
     }
     
     
     public void save(){
-                
-                
                 userDTO.setName(nameTextField.getValue());
                 userDTO.setUserName(userNameTextField.getValue());
                 userDTO.setPassword(passwordTextField.getValue());
                 userDTO.setGroup_id(groupId);
-                
+                userDTO.setEmploye_id(employeId.getSimpleValue().toString());
                 SapressiService.addUser(userDTO, callback);
-                
-                //SapressiService.getIdGroup(groupeCombo.getSimpleValue().toString(), callbackIdGroup);
-                //((GWTServiceAsync)GWT.create(GWTService.class)).getIdGroup(groupeCombo.getSimpleValue().toString(), callbackIdGroup);
-                cleanField();
-                
-    
-    
+                cleanField();  
     }
     
     private void handleComboChangeEvent(){   
@@ -154,6 +179,18 @@ public class AddUserForm extends FormPanel{
         public void handleEvent(BaseEvent be)
         {
             ((GWTServiceAsync)GWT.create(GWTService.class)).getIdGroup(groupeCombo.getSimpleValue().toString(), callbackIdGroup);
+        }
+        });
+    }
+    
+    private void handleemployeIdComboChangeEvent(){
+    
+        employeId.addListener(Events.SelectionChange,new
+        Listener<BaseEvent>(){
+        @Override
+        public void handleEvent(BaseEvent be)
+        {
+            SapressiService.getEmployeName(employeId.getSimpleValue().toString(), callbackNameEmploye);
         }
         });
     }

@@ -106,20 +106,12 @@ public class MainScreen extends ContentPanel {
         return leftSidebarPanel;
     }
     
-    public VerticalPanel getFooter(){
-   // public ContentPanel getFooter(){
-        
-        /*CommercialNavigationPanel commercialNavigationPanel=new CommercialNavigationPanel();
-        Label label = new Label("Design by JDEVELOPER.Copyright © JDEVELOPER.");
-        commercialNavigationPanel.add(label);
-        return commercialNavigationPanel;*/
-           
+    public VerticalPanel getFooter(){        
        VerticalPanel footerPanel = new VerticalPanel();
        footerPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
        Label label = new Label("Design by JDEVELOPER.Copyright © JDEVELOPER.");
        footerPanel.add(label);
        return footerPanel;
-    
     }
     
     public  static void addTab(String Text,ContentPanel contentPanel){
@@ -144,24 +136,14 @@ public class MainScreen extends ContentPanel {
     
     
     private ContentPanel getMenuAndToolBar() {
-        /*NavigationToolBar navigationToolBar=new NavigationToolBar();
-        return navigationToolBar;*/
-        
         CommercialNavigationPanel commercialNavigationPanel = new CommercialNavigationPanel();
         return commercialNavigationPanel;
-        
     }
     
          public ContentPanel getBanner()
         
          {
             ContentPanel bannerPanel = new ContentPanel();
-            //bannerPanel.setLayout(new FitLayout());
-            
-            //VBoxLayout vBoxLayout=new VBoxLayout();
-            //vBoxLayout.setVBoxLayoutAlign(VBoxLayoutAlign.LEFT);
-            //bannerPanel.setLayout(vBoxLayout);
-            
             bannerPanel.add(getMenuBar());     
             VerticalPanel imagePanel = new VerticalPanel();
             imagePanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
