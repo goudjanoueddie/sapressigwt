@@ -5,6 +5,7 @@
  */
 package org.jdeveloper.client.components;
 
+import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.event.ComponentEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
@@ -15,8 +16,14 @@ import com.extjs.gxt.ui.client.widget.layout.AccordionLayout;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.layout.RowData;
 import com.extjs.gxt.ui.client.widget.layout.RowLayout;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.jdeveloper.client.MainScreen;
+import org.jdeveloper.client.SapressiConstant;
+import org.jdeveloper.client.dto.ClientDTO;
+import org.jdeveloper.client.dto.ParametreentrepriseDTO;
+import org.jdeveloper.client.dto.ParametremanagerDTO;
 import org.jdeveloper.client.form.EmployeeForm;
+import org.jdeveloper.client.rpc.GWTServiceAsync;
 
 /**
  *
@@ -33,6 +40,8 @@ public class RightNavigationPanel extends ContentPanel {
     private Button modifierAchatEtInfrastructure = new Button("Achat & Infrastructure");
     private Button modifierGRH =new Button("GRH");
     
+    private Button demandeConvertieCommandeButton = new Button("TDCC");
+    
     private Button ajouterGroupe=new Button("Ajouter Groupe");
     private Button ajouterUser = new Button("Ajouter Utilisateur");
     private Button ajouterEmployeeButton=new Button("Ajouter Employe");
@@ -41,14 +50,58 @@ public class RightNavigationPanel extends ContentPanel {
     
     
     
+    GWTServiceAsync SapressiService = Registry.get(SapressiConstant.SAPRESSI_SERVICE);
     
+        AsyncCallback<ParametreentrepriseDTO> callBackgetParameter = new AsyncCallback<ParametreentrepriseDTO>(){
+            
+        @Override
+        public void onFailure(Throwable caught) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        
+
+        @Override
+        public void onSuccess(ParametreentrepriseDTO result) {
+            
+            CibleCommercialWindows cibleCommandeWindows = new CibleCommercialWindows();
+            cibleCommandeWindows.getCibleCommercialForm().getTauxDeCommandesObtenuesApresProspection().setValue(result.getTcoap().toString());
+            cibleCommandeWindows.getCibleCommercialForm().getNombreDeNouveauxClients().setValue(result.getNc().toString());
+            cibleCommandeWindows.getCibleCommercialForm().getTauxDeDemandeConvertiesEnCommande().setValue(result.getTdcc().toString());
+            cibleCommandeWindows.getCibleCommercialForm().getTauxDeFacturationDesTravauxRealises().setValue(result.getTftr().toString());
+            cibleCommandeWindows.getCibleCommercialForm().getTauxDePrevisionChiffreAffaire().setValue(result.getTpca().toString());
+            cibleCommandeWindows.getCibleCommercialForm().getTauxDeRealisationDuChiffreAffaireReel().setValue(result.getTrcar().toString());
+            cibleCommandeWindows.show();
+        }
+            
+        };
+        
+        AsyncCallback<ParametremanagerDTO> callBackgetParameterManager = new AsyncCallback<ParametremanagerDTO>(){
+            
+        @Override
+        public void onFailure(Throwable caught) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void onSuccess(ParametremanagerDTO result) {
+            CibleManagerEntrepriseWindows CibleManagerEntrepriseWindows = new CibleManagerEntrepriseWindows();
+            CibleManagerEntrepriseWindows.getCibleManagerEntrepriseForm().getNiveauderealisationdesobjectifsoperationnels().setValue(result.getNrdoo().toString());
+            CibleManagerEntrepriseWindows.getCibleManagerEntrepriseForm().getTauxdecreancesrecouvrees().setValue(result.getTcr().toString());
+            CibleManagerEntrepriseWindows.getCibleManagerEntrepriseForm().getTauxdereglementcreancesdesfournisseurs().setValue(result.getTrcf().toString());
+            CibleManagerEntrepriseWindows.getCibleManagerEntrepriseForm().getTauxderentabilitefinanciere().setValue(result.getTrf().toString());
+            CibleManagerEntrepriseWindows.getCibleManagerEntrepriseForm().getTauxdesatisfactiondesclients().setValue(result.getTsdc().toString());
+            CibleManagerEntrepriseWindows.getCibleManagerEntrepriseForm().getTauxexecutiondubudget().setValue(result.getTeb().toString());
+            CibleManagerEntrepriseWindows.show();
+        }
+        
+        };
 
     
     
     
     public RightNavigationPanel(){
         setLayout(new FitLayout());
-        //sapressiPopup.setConstrainViewport(true);
         add(getRightSideBarPanel());     
     }
     
@@ -71,7 +124,7 @@ public class RightNavigationPanel extends ContentPanel {
 
             @Override
             public void componentSelected(ComponentEvent ce) {
-                 
+                 SapressiService.getParametreManager(callBackgetParameterManager);
             }
         });
        
@@ -83,7 +136,8 @@ public class RightNavigationPanel extends ContentPanel {
 
             @Override
             public void componentSelected(ComponentEvent ce) {
-                 
+                 CibleQualiteWindows cibleQualiteWindows = new CibleQualiteWindows();
+                 cibleQualiteWindows.show();
             }
         });
         setupContentPanel.add(modifierCiblePiloterQualiter,new RowData(1,-1,new Margins(5,5,10,5)));
@@ -95,8 +149,7 @@ public class RightNavigationPanel extends ContentPanel {
 
             @Override
             public void componentSelected(ComponentEvent ce) {
-                 CibleCommandeWindows cibleCommandeWindows = new CibleCommandeWindows();
-                 cibleCommandeWindows.show();
+                 SapressiService.getParametreEntreprise(callBackgetParameter);
             }
         });
         setupContentPanel.add(modifierCibleCommercial,new RowData(1,-1,new Margins(5,5,10,5)));
@@ -224,9 +277,35 @@ public class RightNavigationPanel extends ContentPanel {
         });
         
         ajoutProfilContentPanel.add(chercherButton,new RowData(1,-1,new Margins(5,5,10,5)));
+        
+        ContentPanel managerEntrepriseContentPanel = new ContentPanel();
+        managerEntrepriseContentPanel.setHeading("MANAGER ENTREPRISE");
+        managerEntrepriseContentPanel.setIconStyle("iconnavileft1");
+        managerEntrepriseContentPanel.setLayout(new RowLayout());
+        
+        
+        
+        ContentPanel piloterQualiteContentPanel =new ContentPanel();
+        piloterQualiteContentPanel.setHeading("PILOTER QUALITE");
+        piloterQualiteContentPanel.setIconStyle("iconpiloterqualite");
+        piloterQualiteContentPanel.setLayout(new RowLayout());
+        
+        ContentPanel commercialContentPanel = new ContentPanel();
+        commercialContentPanel.setHeading("COMMERCIAL");
+        commercialContentPanel.setIconStyle("iconcommercial");
+        commercialContentPanel.setLayout(new RowLayout());
+        
+        demandeConvertieCommandeButton.setIconStyle("demandeConvertie");
+        demandeConvertieCommandeButton.setScale(Style.ButtonScale.LARGE);
+        demandeConvertieCommandeButton.setToolTip("Taux de demande converties en commandes");
+       
+        commercialContentPanel.add(demandeConvertieCommandeButton,new RowData(1,-1,new Margins(5,5,10,5))) ;
       
         rightSideBarPanel.add(setupContentPanel);
         rightSideBarPanel.add(ajoutProfilContentPanel);
+        rightSideBarPanel.add(managerEntrepriseContentPanel);
+        rightSideBarPanel.add(piloterQualiteContentPanel);
+        rightSideBarPanel.add(commercialContentPanel);
         return rightSideBarPanel;
     
     }

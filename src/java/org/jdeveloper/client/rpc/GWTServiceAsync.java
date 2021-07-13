@@ -4,8 +4,13 @@ package org.jdeveloper.client.rpc;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import java.util.List;
 import org.jdeveloper.client.dto.ClientDTO;
+import org.jdeveloper.client.dto.CommandeDTO;
+import org.jdeveloper.client.dto.DemandesDTO;
+import org.jdeveloper.client.dto.DemandetraitesDTO;
 import org.jdeveloper.client.dto.EmployeDTO;
 import org.jdeveloper.client.dto.GroupuserDTO;
+import org.jdeveloper.client.dto.ParametreentrepriseDTO;
+import org.jdeveloper.client.dto.ParametremanagerDTO;
 import org.jdeveloper.client.dto.ProspectionDTO;
 import org.jdeveloper.client.dto.UserDTO;
 
@@ -50,6 +55,19 @@ public interface GWTServiceAsync {
     public void getEmployeName(String employeId, AsyncCallback<String> asyncCallback);
 
     public void login(String userName, String password, AsyncCallback<java.lang.Boolean> asyncCallback);
+
+    public void getParametreEntreprise(AsyncCallback<ParametreentrepriseDTO> asyncCallback);
+
+    public void getParametreManager(AsyncCallback<ParametremanagerDTO> asyncCallback);
+
+    public void addCommande(CommandeDTO commandeDTO, AsyncCallback<java.lang.Boolean> asyncCallback);
+
+    public void addTauxDemandeTraitee(DemandetraitesDTO demandestraitesDTO,AsyncCallback<java.lang.Boolean> asyncCallback);
+
+    public void addDemande(DemandesDTO demandesDTO, AsyncCallback<java.lang.Boolean> asyncCallback);
+
+
+
 
     
 }

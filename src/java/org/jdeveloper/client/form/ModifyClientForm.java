@@ -92,20 +92,4 @@ public class ModifyClientForm extends FormPanel{
         });
     }
     
-    /*private void handlebtnModifierButton(){
-    
-        btnModifier.addSelectionListener(new SelectionListener(){
-            
-            @Override
-            public void componentSelected(ComponentEvent ce) {
-                SapressiService.findCLient(clientId, callBackFind);
-            }
-        
-        
-        });
-    
-    }*/
-    
-    
-    
 }

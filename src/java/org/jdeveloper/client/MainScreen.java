@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import org.jdeveloper.client.components.LeftNavigationPanel;
 import org.jdeveloper.client.components.MainPanel;
-import org.jdeveloper.client.components.NavigationToolBar;
 import org.jdeveloper.client.components.RightNavigationPanel;
 import org.jdeveloper.client.portlet.CommercialNavigationPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -163,6 +162,15 @@ public class MainScreen extends ContentPanel {
         Menu reportsMenu=new Menu();
         Menu helpMenu=new Menu();
         
+        Menu managerMenu = new Menu();
+        Menu qualiteMenu = new Menu();
+        Menu commercialMenu = new Menu();
+        Menu formationMenu = new Menu();
+        Menu controleMenu = new Menu();
+        Menu equipementMenu = new Menu();
+        Menu achatInfraMenu = new Menu();
+        Menu grhMenu = new Menu();
+        
         //Items for File menu
         MenuItem productMenuItem=new MenuItem("Product");
         fileMenu.add(productMenuItem);
@@ -188,10 +196,8 @@ public class MainScreen extends ContentPanel {
         helpMenu.add(aboutMenuItem);
         
         MenuBarItem menuBarItemFile=new MenuBarItem("File",fileMenu);
-        MenuBarItem menuBarItemReports=
-        new MenuBarItem("Reports",reportsMenu);
-        MenuBarItem menuBarItemHelp=
-        new MenuBarItem("Help",helpMenu);
+        MenuBarItem menuBarItemReports = new MenuBarItem("Reports",reportsMenu);
+        MenuBarItem menuBarItemHelp = new MenuBarItem("Help",helpMenu);
         
         menuBar.add(menuBarItemFile);
         menuBar.add(menuBarItemReports);

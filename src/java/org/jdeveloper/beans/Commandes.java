@@ -40,6 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Commandes.findByDateCommande", query = "SELECT c FROM Commandes c WHERE c.dateCommande = :dateCommande")})
 public class Commandes implements Serializable {
 
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,6 +52,10 @@ public class Commandes implements Serializable {
     @Column(name = "date_commande")
     @Temporal(TemporalType.DATE)
     private Date dateCommande;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "montant")
+    private double montant;
     @JoinColumn(name = "id_clients", referencedColumnName = "id_clients")
     @ManyToOne(optional = false)
     private Clients idClients;
@@ -125,6 +130,14 @@ public class Commandes implements Serializable {
     @Override
     public String toString() {
         return "org.jdeveloper.beans.Commandes[ idCommande=" + idCommande + " ]";
+    }
+
+    public double getMontant() {
+        return montant;
+    }
+
+    public void setMontant(double montant) {
+        this.montant = montant;
     }
     
 }

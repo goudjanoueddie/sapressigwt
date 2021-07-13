@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.transaction.UserTransaction;
 import org.jdeveloper.beans.Commandes;
 import org.jdeveloper.controller.exceptions.IllegalOrphanException;
@@ -28,18 +29,41 @@ import org.jdeveloper.controller.exceptions.RollbackFailureException;
  */
 public class CommandesJpaController implements Serializable {
 
+    private UserTransaction utx = null;
+    private EntityManagerFactory emf = null;
+
     public CommandesJpaController(UserTransaction utx, EntityManagerFactory emf) {
         this.utx = utx;
         this.emf = emf;
     }
-    private UserTransaction utx = null;
-    private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
+    
+    public CommandesJpaController(){
+        emf= Persistence.createEntityManagerFactory("TableaudeBordSapressiPU");
+    }
 
     public void create(Commandes commandes) throws RollbackFailureException, Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            em.persist(commandes);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            try {
+                //utx.rollback();
+            } catch (Exception re) {
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+            }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
         
     }
 

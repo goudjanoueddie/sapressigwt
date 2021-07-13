@@ -8,7 +8,6 @@ package org.jdeveloper.client;
 //import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 
 import com.extjs.gxt.ui.client.Registry;
-import org.jdeveloper.client.components.NavigationToolBar;
 import org.jdeveloper.client.components.MainPanel;
 import org.jdeveloper.client.components.RightNavigationPanel;
 import org.jdeveloper.client.components.LeftNavigationPanel;

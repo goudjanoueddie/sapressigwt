@@ -9,8 +9,13 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import java.util.List;
 import org.jdeveloper.client.dto.ClientDTO;
+import org.jdeveloper.client.dto.CommandeDTO;
+import org.jdeveloper.client.dto.DemandesDTO;
+import org.jdeveloper.client.dto.DemandetraitesDTO;
 import org.jdeveloper.client.dto.EmployeDTO;
 import org.jdeveloper.client.dto.GroupuserDTO;
+import org.jdeveloper.client.dto.ParametreentrepriseDTO;
+import org.jdeveloper.client.dto.ParametremanagerDTO;
 import org.jdeveloper.client.dto.ProspectionDTO;
 import org.jdeveloper.client.dto.UserDTO;
 
@@ -57,6 +62,14 @@ public interface GWTService extends RemoteService {
     
     public boolean login(String userName , String password);
     
+    public ParametreentrepriseDTO getParametreEntreprise();
     
-  
+    public ParametremanagerDTO getParametreManager();
+    
+    public boolean addCommande(CommandeDTO commandeDTO);
+    
+    public boolean addTauxDemandeTraitee(DemandetraitesDTO demandestraitesDTO);
+    
+    public boolean addDemande(DemandesDTO demandesDTO);
+    
 }

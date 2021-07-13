@@ -159,7 +159,6 @@
 }
 
 .enregistrerGroupeCss {   
-    /*background: url(../images/ownimages/icons/redo-icone.png) no-repeat center left !important;*/
     background: url(../images/ownimages/icons/ajouter-icone.png) no-repeat center left !important;
 }
 
@@ -173,7 +172,6 @@
 
 .modifierFinalCss{
     background: url(../images/ownimages/icons/modifierfinal.png) no-repeat center left !important;
-    
 }
 
 .quitterFinalCss{
@@ -209,6 +207,13 @@
     background:url(../images/ownimages/icons/jour-icone.png)no-repeat center left !important;
 }
 
+.demandeRecu{
+    background:url(../images/ownimages/icons/audio-folder-icon.png)no-repeat center left !important;
+}
+
+.demandeConvertie{
+    background:url(../images/ownimages/icons/computer-icon.png)no-repeat center left !important;
+}
 
 
 

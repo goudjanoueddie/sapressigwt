@@ -231,13 +231,13 @@ public class ClientForm extends FormPanel{
             
             modifierButton.addSelectionListener(new SelectionListener(){
 
-     @Override
-     public void componentSelected(ComponentEvent ce) {
-         
-        ModifyClientWindow modifyClientWindow = new ModifyClientWindow();
-        modifyClientWindow.show();
-          }
-        });
+            @Override
+            public void componentSelected(ComponentEvent ce) {
+
+               ModifyClientWindow modifyClientWindow = new ModifyClientWindow();
+               modifyClientWindow.show();
+                 }
+               });
     
     
     }

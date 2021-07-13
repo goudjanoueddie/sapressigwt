@@ -19,6 +19,7 @@ import com.extjs.gxt.ui.client.event.SelectionListener;
 import org.jdeveloper.client.MainEntryPoint;
 import org.jdeveloper.client.MainScreen;
 import org.jdeveloper.client.form.ClientForm;
+import org.jdeveloper.client.form.DemandeForm;
 import org.jdeveloper.client.form.PiloterQualiteForm;
 import org.jdeveloper.client.form.ProspectionForm;
 import  org.jdeveloper.client.portlet.CommercialNavigationPanel;
@@ -42,6 +43,7 @@ public class LeftNavigationPanel extends ContentPanel{
     private Button commandesButton = new Button("Commandes");
     private Button commerciauxButton = new Button("Commerciaux");
     private Button factureButton = new Button("Facture");
+    private Button demandeButton =new Button("Demandes");
     private Button recapButton=new Button("ShortCut");
     
     
@@ -70,10 +72,6 @@ public class LeftNavigationPanel extends ContentPanel{
 
             @Override
             public void componentSelected(ComponentEvent ce) {
-                /*Info.display("test","click on ajouteretu");
-                EtudiantForm etudiantForm=new EtudiantForm();
-                universiteEntryPoint.getInstance().addTab("Ajout Etudiant", etudiantForm);*/
-                
                 ManagerEntrepriseForm managerEntrepriseForm=new ManagerEntrepriseForm();
                 MainScreen.addTab("Manager L'entreprise", managerEntrepriseForm);
             }
@@ -133,19 +131,13 @@ public class LeftNavigationPanel extends ContentPanel{
           prospectionButton.setIconStyle("prospection-button");
           prospectionButton.setScale(Style.ButtonScale.LARGE);
           
-           prospectionButton.addSelectionListener(new SelectionListener(){
+          prospectionButton.addSelectionListener(new SelectionListener(){
 
             @Override
             public void componentSelected(ComponentEvent ce) {
-                /*ProspectionWindow prospection=new ProspectionWindow();
-                prospection.show();*/
-                
                 ProspectionForm prospectionForm=new ProspectionForm();
                 MainScreen.addTab("Prospection", prospectionForm);
             }
-        
-        
-        
         });
           
           
@@ -167,32 +159,37 @@ public class LeftNavigationPanel extends ContentPanel{
           commandesButton.setIconStyle("commandes-button");
           commandesButton.setScale(Style.ButtonScale.LARGE);
           
+          commandesButton.addSelectionListener(new SelectionListener(){
+
+            @Override
+            public void componentSelected(ComponentEvent ce) {
+                AddCommandeWindow addCommandeWindow = new AddCommandeWindow();
+                addCommandeWindow.show();
+            }
+        });
+          
           
           factureButton.setIconStyle("factures-button");
           factureButton.setScale(Style.ButtonScale.LARGE);
           
-          /*recapButton.setScale(Style.ButtonScale.LARGE);
-          recapButton.addSelectionListener(new SelectionListener(){
+          demandeButton.setIconStyle("demandeRecu");
+          demandeButton.setScale(Style.ButtonScale.LARGE);
+          
+          demandeButton.addSelectionListener(new SelectionListener(){
+
             @Override
             public void componentSelected(ComponentEvent ce) {
-                
-                SapressiPopup  sapressiPopup =new SapressiPopup();
-                sapressiPopup.show();
-                
+                DemandeForm demandeForm = new DemandeForm();
+                MainScreen.addTab("Demande", demandeForm);
             }
-        });*/
-
+        });
           
           commercialContentPanel.add(prospectionButton,new RowData(1,-1,new Margins(5,5,10,5)));
           commercialContentPanel.add(clientsButton,new RowData(1,-1,new Margins(5,5,10,5)));
           commercialContentPanel.add(commandesButton,new RowData(1,-1,new Margins(5,5,10,5)));
           commercialContentPanel.add(factureButton,new RowData(1,-1,new Margins(5,5,10,5)));
-          //commercialContentPanel.add(recapButton,new RowData(1,-1,new Margins(5,5,10,5)));
+          commercialContentPanel.add(demandeButton, new RowData(1,-1,new Margins(5,5,10,5)));
           
-          
-          
-          
-        
           leftSideBarPanel.add(setupContentPanel);
           leftSideBarPanel.add(piloterQualiteContentPanel);
           leftSideBarPanel.add(commercialContentPanel);

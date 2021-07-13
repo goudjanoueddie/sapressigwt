@@ -6,20 +6,35 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jdeveloper.beans.Clients;
+import org.jdeveloper.beans.Commandes;
+import org.jdeveloper.beans.Demandes;
+import org.jdeveloper.beans.Demandestraites;
 import org.jdeveloper.beans.Employes;
 import org.jdeveloper.beans.Groupuser;
+import org.jdeveloper.beans.Parametreentreprise;
+import org.jdeveloper.beans.Parametremanager;
 import org.jdeveloper.beans.Prospection;
 import org.jdeveloper.beans.User;
 import org.jdeveloper.client.dto.ClientDTO;
+import org.jdeveloper.client.dto.CommandeDTO;
+import org.jdeveloper.client.dto.DemandesDTO;
+import org.jdeveloper.client.dto.DemandetraitesDTO;
 import org.jdeveloper.client.dto.EmployeDTO;
 import org.jdeveloper.client.dto.GroupuserDTO;
+import org.jdeveloper.client.dto.ParametreentrepriseDTO;
+import org.jdeveloper.client.dto.ParametremanagerDTO;
 import org.jdeveloper.client.dto.ProspectionDTO;
 import org.jdeveloper.client.dto.UserDTO;
 
 import org.jdeveloper.client.rpc.GWTService;
 import org.jdeveloper.controller.ClientsJpaController;
+import org.jdeveloper.controller.CommandesJpaController;
+import org.jdeveloper.controller.DemandesJpaController;
+import org.jdeveloper.controller.DemandestraitesJpaController;
 import org.jdeveloper.controller.EmployesJpaController;
 import org.jdeveloper.controller.GroupuserJpaController;
+import org.jdeveloper.controller.ParametreentrepriseJpaController;
+import org.jdeveloper.controller.ParametremanagerJpaController;
 import org.jdeveloper.controller.ProspectionJpaController;
 import org.jdeveloper.controller.UserJpaController;
 import org.jdeveloper.controller.exceptions.IllegalOrphanException;
@@ -311,6 +326,129 @@ public class GWTServiceImpl extends RemoteServiceServlet implements GWTService {
         }
         return isPresent;     
     }
+
+    @Override
+    public ParametreentrepriseDTO getParametreEntreprise() {
+        ParametreentrepriseJpaController parametreentrepriseJpaController = new ParametreentrepriseJpaController();
+        Parametreentreprise parametreentreprise = parametreentrepriseJpaController.findParametreentreprise(1);
+        ParametreentrepriseDTO parametreentrepriseDTO = null;
+    
+        if(parametreentreprise != null){
+            parametreentrepriseDTO = new ParametreentrepriseDTO();
+            parametreentrepriseDTO.setId(parametreentreprise.getId());
+            parametreentrepriseDTO.setTdcc(parametreentreprise.getTdcc());
+            parametreentrepriseDTO.setNc(parametreentreprise.getNc());
+            parametreentrepriseDTO.setTcoap(parametreentreprise.getTcoap());
+            parametreentrepriseDTO.setTpca(parametreentreprise.getTpca());
+            parametreentrepriseDTO.setTftr(parametreentreprise.getTftr());
+            parametreentrepriseDTO.setTrcar(parametreentreprise.getTrcar());
+        }
+        
+        return parametreentrepriseDTO;
+    }
+
+    @Override
+    public ParametremanagerDTO getParametreManager() {
+        
+        ParametremanagerJpaController parametremanagerJpaController = new ParametremanagerJpaController();
+        Parametremanager parametremanager = parametremanagerJpaController.findParametremanager(1);
+        ParametremanagerDTO parametremanagerDTO = null;
+        
+        if(parametremanager != null){
+            parametremanagerDTO = new ParametremanagerDTO();
+            parametremanagerDTO.setId(parametremanager.getId());
+            parametremanagerDTO.setNrdoo(parametremanager.getNrdoo());
+            parametremanagerDTO.setTrf(parametremanager.getTrf());
+            parametremanagerDTO.setTeb(parametremanager.getTeb());
+            parametremanagerDTO.setTcr(parametremanager.getTcr());
+            parametremanagerDTO.setTrcf(parametremanager.getTrcf());
+            parametremanagerDTO.setTsdc(parametremanager.getTsdc());
+        }
+        return parametremanagerDTO;            
+    }
+
+    @Override
+    public boolean addCommande(CommandeDTO commandeDTO) {
+        Commandes commandes =new Commandes();
+        commandes.setIdCommande(commandeDTO.getIdCommande());
+        commandes.setDateCommande(commandeDTO.getDateCommande());
+        commandes.setIdClients(new Clients(commandeDTO.getIdClients()));
+        commandes.setMontant(commandeDTO.getMontant());
+        
+        CommandesJpaController commandeJpaController = new CommandesJpaController();
+        boolean added = false;
+        
+        try{
+            commandeJpaController.create(commandes);
+            added =true;
+        }catch (RollbackFailureException ex){
+            Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }catch (Exception ex)
+        {
+            Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return added;
+    }
+
+    @Override
+    public boolean addTauxDemandeTraitee(DemandetraitesDTO demandetraitesDTO) {
+        Demandestraites demandestraites    = new Demandestraites();
+        demandestraites.setId(demandetraitesDTO.getId());
+        demandestraites.setDateDebut(demandetraitesDTO.getDateDebut());
+        demandestraites.setDateFin(demandetraitesDTO.getDateFin());
+        demandestraites.setDr(demandetraitesDTO.getDr());
+        demandestraites.setDtdd(demandetraitesDTO.getDtdd());
+        demandestraites.setObservations(demandetraitesDTO.getObservations());
+        
+        DemandestraitesJpaController demandestraitesJpaController = new DemandestraitesJpaController();
+        boolean added =false;
+        
+        try{
+            demandestraitesJpaController.create(demandestraites);
+            added =true;
+        }catch (RollbackFailureException ex){
+            Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }catch (Exception ex)
+        {
+            Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return added;
+        
+        
+    }
+
+    @Override
+    public boolean addDemande(DemandesDTO demandesDTO) {
+        
+        Demandes demandes = new Demandes();
+        demandes.setId(demandesDTO.getId());
+        demandes.setDateDemande(demandesDTO.getDateDemande());
+        demandes.setNomClient(demandesDTO.getNomClient());
+        demandes.setObjet(demandesDTO.getObjet());
+        demandes.setReference(demandesDTO.getReference());
+        demandes.setType(demandesDTO.getType());
+        demandes.setMoyen(demandesDTO.getMoyen());
+        boolean added = false;
+        
+        DemandesJpaController demandesJpaController = new DemandesJpaController();
+        
+        try{
+            demandesJpaController.create(demandes);
+            added =true;
+        }catch (RollbackFailureException ex){
+            Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }catch (Exception ex)
+        {
+            Logger.getLogger(GWTServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return added;
+    }
+
+   
+    
 }
 
 

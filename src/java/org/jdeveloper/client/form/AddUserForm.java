@@ -83,7 +83,6 @@ public class AddUserForm extends FormPanel{
 
         @Override
         public void onSuccess(List<String> result) {
-            
             groupeCombo.add(result);
         }
     

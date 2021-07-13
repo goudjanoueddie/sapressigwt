@@ -40,7 +40,7 @@ public class AddUserWindow extends Window {
         btnAdd.setScale(Style.ButtonScale.LARGE);
         ToolTipConfig btnAddToolTipConfig=new ToolTipConfig();
         btnAddToolTipConfig.setTitle("Ajouter");
-        btnAddToolTipConfig.setText("Ce bouton vous permet d'ajouter des utlisateurs");
+        btnAddToolTipConfig.setText("Ce bouton vous permet d'ajouter des utilisateurs");
         btnAdd.setToolTip(btnAddToolTipConfig);
         
         btnRemove.setIconStyle("removeGroupeCss");
